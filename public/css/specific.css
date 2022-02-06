@@ -1,0 +1,42 @@
+/* LOGIN FORM */
+
+/* container for login form */
+.login-form {
+    width: 20%;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* elements inside login form */
+.login-form > * {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.login-form #logo {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1rem;
+    width: 90%;
+}
+
+.login-form #msg {
+    width: 90%;
+}
+
+.login-form #login-button {
+    width: 90%;
+}
+
+.login-form #username, #password{
+    text-align: left;
+    background-image: none; /*Removes the icon that bootstrap gives on is-invalid*/
+    width: 90%;
+}
