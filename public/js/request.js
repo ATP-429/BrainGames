@@ -4,8 +4,8 @@
  */
 
 functions = [
-    ['testfn', 'firstparam', 'secondparam'],
     ['login', 'username', 'password'],
+    ['register', 'username', 'email', 'password'],
     ['poll']
 ]
 

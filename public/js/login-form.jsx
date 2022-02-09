@@ -1,11 +1,3 @@
-const Input = (props) => {
-    return (
-        <React.Fragment>
-
-        </React.Fragment>
-    );
-}
-
 const FailMessage = () => {
     return (
         <div id="msg" className="alert alert-danger">
@@ -15,7 +7,11 @@ const FailMessage = () => {
 }
 
 const SuccessMessage = () => {
-    return null;
+    return (
+        <div id="msg" className="alert alert-success">
+            Logged in successfully! Redirecting...
+        </div>
+    )
 }
 
 const LoginForm = () => {
@@ -24,7 +20,7 @@ const LoginForm = () => {
     [password, setPassword] = React.useState('');
 
     loginSuccess = () => {
-
+        setState('success');
     }
 
     loginFail = () => {
@@ -33,7 +29,6 @@ const LoginForm = () => {
 
     tryLogin = async () => {
         setState('logging');
-        console.log(`Logging in with ${username} and ${password}`);
         login(username, password).then((res) => {
             if(res['success'])
                 loginSuccess();
@@ -46,16 +41,33 @@ const LoginForm = () => {
         setState('');
     }
 
+    textclass = () => {
+        let classes = ['form-control']
+        switch(state) {
+            case 'fail':
+                classes.push('is-invalid')
+        }
+
+        return classes.join(' ');
+    }
+
     return (
         <React.Fragment>
             <div className="login-form border border-dark">
                 <img id="logo" src="res/images/logos/main.png" />
                 <hr style={{background: 'black', opacity: 1.0}} />
-                <input id="username" onChange={(e) => {reset(); setUsername(e.target.value)}} className={'form-control ' + (state == 'fail' ? 'is-invalid' : '')} type="text" name="username" placeholder="Username/Email" />
-                <input id="password" onChange={(e) => {reset(); setPassword(e.target.value)}} className={'form-control ' + (state == 'fail' ? 'is-invalid' : '')} type="password" name="password" placeholder="Password" />
-                <Input onChange={(e) => {reset(); setUsername(e.target.value)}} invalidity={state == 'fail' ? 'is-invalid' : ''}/>
+                <input id="username" onChange={(e) => {reset(); setUsername(e.target.value)}} className={textclass()} type="text" name="username" placeholder="Username/Email" disabled={state=='success'}/>
+                <input id="password" onChange={(e) => {reset(); setPassword(e.target.value)}} className={textclass()} type="password" name="password" placeholder="Password" disabled={state=='success'}/>
                 <button id="login-button" className="btn btn-success" onClick={tryLogin}> {state == 'logging' ? 'Loggin in...' : 'Login'}</button>
-                {state == 'fail' ? <FailMessage /> : <SuccessMessage />}
+                {function() {
+                    switch(state) {
+                        case 'fail':
+                            return <FailMessage />
+                        case 'success':
+                            return <SuccessMessage />
+                    }
+                }()
+                }
             </div>
         </React.Fragment>
         );

@@ -3,6 +3,8 @@
 const {MongoClient} = require('mongodb');
 const {ObjectId} = require('mongodb');
 const express = require('express');
+const responder = require('./responder')
+
 const app = express();
 const port = 3000;
 
@@ -15,35 +17,8 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
-app.post('/request', async (actualRequest, actualResponse) => {
-    let req = actualRequest.body;
-    let client = await connect();
-    let res = {};
-    switch(req['request_type']) {
-        case 'login':
-            console.log(`Tried login with ${req['username']} and ${req['password']}`);
-            break;
-
-        case 'poll':
-            res['detail'] = "Loud and clear";
-            break;
-    }
-    actualResponse.end(JSON.stringify(res));
-    client.close();
-});
+app.post('/request', responder.respond); //respond is a function defined in responder.js
 
 app.listen(port, () => {
     console.log(`Listening to port ${port}`);
 });
-
-async function connect() {
-    const uri = "mongodb://127.0.0.1:27017";
-    const client = new MongoClient(uri);
-
-    try {
-        await client.connect();
-        return client;
-    } catch(e) {
-        console.error(e);
-    }
-}

@@ -1,7 +1,3 @@
-const Input = props => {
-  return /*#__PURE__*/React.createElement(React.Fragment, null);
-};
-
 const FailMessage = () => {
   return /*#__PURE__*/React.createElement("div", {
     id: "msg",
@@ -10,7 +6,10 @@ const FailMessage = () => {
 };
 
 const SuccessMessage = () => {
-  return null;
+  return /*#__PURE__*/React.createElement("div", {
+    id: "msg",
+    className: "alert alert-success"
+  }, "Logged in successfully! Redirecting...");
 };
 
 const LoginForm = () => {
@@ -18,7 +17,9 @@ const LoginForm = () => {
   [username, setUsername] = React.useState('');
   [password, setPassword] = React.useState('');
 
-  loginSuccess = () => {};
+  loginSuccess = () => {
+    setState('success');
+  };
 
   loginFail = () => {
     setState('fail');
@@ -26,7 +27,6 @@ const LoginForm = () => {
 
   tryLogin = async () => {
     setState('logging');
-    console.log(`Logging in with ${username} and ${password}`);
     login(username, password).then(res => {
       if (res['success']) loginSuccess();else loginFail();
     });
@@ -34,6 +34,17 @@ const LoginForm = () => {
 
   reset = () => {
     setState('');
+  };
+
+  textclass = () => {
+    let classes = ['form-control'];
+
+    switch (state) {
+      case 'fail':
+        classes.push('is-invalid');
+    }
+
+    return classes.join(' ');
   };
 
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
@@ -52,31 +63,35 @@ const LoginForm = () => {
       reset();
       setUsername(e.target.value);
     },
-    className: 'form-control ' + (state == 'fail' ? 'is-invalid' : ''),
+    className: textclass(),
     type: "text",
     name: "username",
-    placeholder: "Username/Email"
+    placeholder: "Username/Email",
+    disabled: state == 'success'
   }), /*#__PURE__*/React.createElement("input", {
     id: "password",
     onChange: e => {
       reset();
       setPassword(e.target.value);
     },
-    className: 'form-control ' + (state == 'fail' ? 'is-invalid' : ''),
+    className: textclass(),
     type: "password",
     name: "password",
-    placeholder: "Password"
-  }), /*#__PURE__*/React.createElement(Input, {
-    onChange: e => {
-      reset();
-      setUsername(e.target.value);
-    },
-    invalidity: state == 'fail' ? 'is-invalid' : ''
+    placeholder: "Password",
+    disabled: state == 'success'
   }), /*#__PURE__*/React.createElement("button", {
     id: "login-button",
     className: "btn btn-success",
     onClick: tryLogin
-  }, " ", state == 'logging' ? 'Loggin in...' : 'Login'), state == 'fail' ? /*#__PURE__*/React.createElement(FailMessage, null) : /*#__PURE__*/React.createElement(SuccessMessage, null)));
+  }, " ", state == 'logging' ? 'Loggin in...' : 'Login'), function () {
+    switch (state) {
+      case 'fail':
+        return /*#__PURE__*/React.createElement(FailMessage, null);
+
+      case 'success':
+        return /*#__PURE__*/React.createElement(SuccessMessage, null);
+    }
+  }()));
 };
 
 ReactDOM.render( /*#__PURE__*/React.createElement(LoginForm, null), document.getElementById('page'));
