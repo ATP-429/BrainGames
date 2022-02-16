@@ -53,7 +53,7 @@ const LoginForm = () => {
 
     return (
         <React.Fragment>
-            <div className="login-form border border-dark">
+            <div id="login-form" className="border border-dark">
                 <img id="logo" src="res/images/logos/main.png" />
                 <hr style={{background: 'black', opacity: 1.0}} />
                 <input id="username" onChange={(e) => {reset(); setUsername(e.target.value)}} className={textclass()} type="text" name="username" placeholder="Username/Email" disabled={state=='success'}/>

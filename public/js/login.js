@@ -48,7 +48,8 @@ const LoginForm = () => {
   };
 
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-    className: "login-form border border-dark"
+    id: "login-form",
+    className: "border border-dark"
   }, /*#__PURE__*/React.createElement("img", {
     id: "logo",
     src: "res/images/logos/main.png"
@@ -95,4 +96,4 @@ const LoginForm = () => {
 };
 
 ReactDOM.render( /*#__PURE__*/React.createElement(LoginForm, null), document.getElementById('page'));
-//# sourceMappingURL=login-form.js.map
+//# sourceMappingURL=login.js.map

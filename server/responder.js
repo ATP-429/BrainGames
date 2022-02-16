@@ -2,8 +2,10 @@
 
 const engine = require('./engine');
 
+globalThis.gameEngine = 'hi';
+
 module.exports = {
-    respond: async (actualRequest, actualResponse) => {
+    responder: async (actualRequest, actualResponse) => {
         let req = actualRequest.body;
         let res = {};
         let success = () => {res['success'] = 1};
@@ -32,6 +34,20 @@ module.exports = {
                 });
                 break;
 
+            case 'create_game':
+                await engine.create_game(req.name).then((id) => {
+                    if(id != null) {
+                        success();
+                        res.id = id;
+                        detail("Game created successfully");
+                    }
+                    else {
+                        fail();
+                        detail("Game not created");
+                    }
+                });
+                break;
+
             case 'poll':
                 success();
                 detail("Loud and clear");
@@ -42,5 +58,9 @@ module.exports = {
                 detail("Unkown request");
         }
         actualResponse.end(JSON.stringify(res));
+    },
+
+    loadGameEngine: (gameEngine) => {
+        globalThis.gameEngine = gameEngine
     }
 }

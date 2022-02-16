@@ -1,7 +1,17 @@
+/* GAME PAGE */
+#canvas {
+    width: 50%;
+    height: 75%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 /* LOGIN FORM */
 
 /* container for login form */
-.login-form {
+#login-form {
     width: 20%;
 
     position: absolute;
@@ -11,7 +21,7 @@
 }
 
 /* elements inside login form */
-.login-form > * {
+#login-form > * {
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -20,22 +30,22 @@
     text-align: center;
 }
 
-.login-form #logo {
+#login-form #logo {
     margin-left: auto;
     margin-right: auto;
     margin-top: 1rem;
     width: 90%;
 }
 
-.login-form #msg {
+#login-form #msg {
     width: 90%;
 }
 
-.login-form #login-button {
+#login-form #login-button {
     width: 90%;
 }
 
-.login-form #username, #password{
+#login-form #username, #password{
     text-align: left;
     background-image: none; /*Removes the icon that bootstrap gives on is-invalid*/
     width: 90%;

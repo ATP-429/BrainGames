@@ -1,0 +1,29 @@
+{
+  "name": "BrainGames",
+  "version": "1.0.0",
+  "description": "",
+  "main": "engine.js",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.2",
+    "mongodb": "^4.3.1",
+    "socket.io": "^4.4.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ATP-429/BrainGames.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ATP-429/BrainGames/issues"
+  },
+  "homepage": "https://github.com/ATP-429/BrainGames#readme"
+}

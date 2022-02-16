@@ -1,3 +1,5 @@
+'use strict'
+
 const {MongoClient} = require('mongodb');
 const {ObjectId} = require('mongodb');
 const express = require('express');
@@ -14,7 +16,7 @@ const client = new MongoClient(uri);
     }
 })();
 
-log = (data) => {
+var log = (data) => {
     console.log(data);
 }
 
@@ -48,6 +50,15 @@ module.exports =
                 return user;
             else
                 return null;
+        });
+    },
+
+    create_game: async (name) => {
+        return gameEngine.create_game(name).then(id => {
+            if(id == null)
+                return null;
+            else
+                return id;
         });
     }
 }
