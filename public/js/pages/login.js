@@ -60,6 +60,9 @@ const LoginForm = () => {
     }
   }), /*#__PURE__*/React.createElement("input", {
     id: "username",
+    onKeyUp: e => {
+      if (e.key == 'Enter') tryLogin();
+    },
     onChange: e => {
       reset();
       setUsername(e.target.value);
@@ -71,6 +74,9 @@ const LoginForm = () => {
     disabled: state == 'success'
   }), /*#__PURE__*/React.createElement("input", {
     id: "password",
+    onKeyUp: e => {
+      if (e.key == 'Enter') tryLogin();
+    },
     onChange: e => {
       reset();
       setPassword(e.target.value);

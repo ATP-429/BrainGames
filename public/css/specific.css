@@ -1,11 +1,42 @@
 /* GAME PAGE */
-#canvas {
-    width: 50%;
-    height: 75%;
+
+#div-canvas {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+#canvas {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#indicators-container {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+
+    display: flex;
+    background-color: lightgray;
+}
+
+.indicator {
+    width: 16px;
+    height: 16px;
+    padding: 4px;
+    margin: 4px;
+    overflow: hidden;
+}
+
+.indicator.input-taken[active='true'] {
+    background-color: green;
+}
+
+.update-done {
+    background-color: yellow;
 }
 
 /* LOGIN FORM */

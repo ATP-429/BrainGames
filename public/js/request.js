@@ -21,7 +21,7 @@ for(fn of functions) {
 }
 
 async function request(values) {
-    return fetch('http://localhost:3000/request', {
+    return fetch('/request', {
         method: 'post',
         headers: {
             'Content-Type': 'application/json'

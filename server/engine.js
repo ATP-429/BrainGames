@@ -31,8 +31,8 @@ module.exports =
     //Returns user array if login was successful, null otherwise
     login: async (username, password) => {
         return client.db('braingames').collection('user_cred').findOne({username: username}).then((user) => {
-            auth = (user, password) => {
-                hash = user['password']
+            let auth = (user, password) => {
+                let hash = user['password']
                 return bcrypt.compareSync(password, hash)
             }
             //If user is null, check if they've entered the email

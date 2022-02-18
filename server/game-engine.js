@@ -8,6 +8,7 @@ const responder = require('./responder')
 const socketIO = require('socket.io');
 const { v4 : uuidv4 } = require('uuid');
 const Game = require('./games/common/game');
+const HelloGame = require('./games/HelloGame');
 
 var currentGames = {}
 
@@ -19,6 +20,7 @@ module.exports = class GameEngine {
             if(game != undefined) {
                 socket.emit('msg', "Connected to game");
                 game.addPlayer(socket);
+                socket.emit('details', game.getDetails());
             }
             else {
                 socket.emit('msg', "Game not found");
