@@ -1,7 +1,7 @@
 //This is the react file where we'll handle frontend stuff
 //This file will send the data to js/games/common/game.js using react,
 //which will then send the data to the server/games/common/game.js
-var game = null, canvas = null;
+var game = null, canvas = null, Canvas = null;
 create_game('HelloGame').then(res => {
     var socket = io.connect('http://localhost:3000', {query : `id=${res.id}`});
     socket.on('msg', (data) => {
@@ -9,13 +9,11 @@ create_game('HelloGame').then(res => {
     });
 
     socket.on('details', async (details) => {
-        await fetch(`/js/games/${details.name}.js`).then(file => file.text()).then((text) => eval.call(window, text));
+        await fetch(`/js/games/${details.name}/${details.name}-base.js`).then(file => file.text()).then((text) => eval.call(window, text));
 
-        const Canvas = () => {
+        Canvas = (props) => {
             [mouse, setMouse] = React.useState({x: 0, y: 0});
             [keys, setKeys] = React.useState({});
-            [inputTaken, setInputTaken] = React.useState(false);
-            [updateDone, setUpdateDone] = React.useState(false);
             [gameState, setGameState] = React.useState({});
 
             getInput = () => {
@@ -26,12 +24,11 @@ create_game('HelloGame').then(res => {
             //Since we're passing an empty array as the second parameter, a new game object will never be created.
             //So, the code will only run once, after this component has been rendered
             React.useEffect(() => {
-                game = eval(`new ${details.name}(socket, details, getInput)`); //Pass the inputs by reference
+                game = eval(`new ${details.name}(socket, details, getInput, setGameState, reactRender)`); //Pass the inputs by reference
                 canvas = document.getElementById('canvas');
-                setInterval(() => render(canvas), 1000/details.rendersPerSec);
             }, []);
 
-            render = (canvas) => {
+            reactRender = () => {
                 let bufferCanvas = document.createElement('canvas');
                 let ctx = bufferCanvas.getContext('2d');
                 bufferCanvas.width = canvas.width;
@@ -46,11 +43,6 @@ create_game('HelloGame').then(res => {
             return (
                 //The div-canvas will be used for html elements
                 <React.Fragment>
-                    <div id="indicators-container">
-                        <div className='indicator input-taken' active={inputTaken ? 'true' : 'false'}> </div>
-                        <div className='indicator' active={inputTaken}> </div>
-                        <div className='indicator' > </div>
-                    </div>
                     <div id="div-canvas"
                         style={{zIndex: 2, width: details.canvasWidth, height: details.canvasHeight}}
                         tabIndex="0" //We have to do this to accept keyboard inputs from the canvas
@@ -59,7 +51,7 @@ create_game('HelloGame').then(res => {
                         onMouseMove={e => {setMouse({...mouse, x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY})}}
                         onKeyDown={e => setKeys({...keys, [e.code]: true})}
                         onKeyUp={e => delete keys[e.code]}>
-                        <button>Hello</button>
+                        <props.REACT render={reactRender} mouse={mouse} setMouse={setMouse} keys={keys} setKeys={setKeys} gameState={gameState} setGameState={setGameState}/>
                     </div>
                     <canvas
                         style={{zIndex: 1}}
@@ -69,8 +61,9 @@ create_game('HelloGame').then(res => {
                     </canvas>
                 </React.Fragment>
             )
-        }
+        };
 
-        ReactDOM.render(<Canvas />, document.getElementById('page'));
+        await fetch(`/js/games/${details.name}/${details.name}-react.js`).then(file => file.text()).then((text) => eval.call(window, text));
     })
+
 });

@@ -16,11 +16,7 @@
 
 #indicators-container {
     position: absolute;
-    top: 2px;
-    left: 2px;
-
     display: flex;
-    background-color: lightgray;
 }
 
 .indicator {
@@ -32,10 +28,10 @@
 }
 
 .indicator.input-taken[active='true'] {
-    background-color: green;
+    background-color: rgb(86, 227, 0);
 }
 
-.update-done {
+.indicator.update-done[active='true'] {
     background-color: yellow;
 }
 

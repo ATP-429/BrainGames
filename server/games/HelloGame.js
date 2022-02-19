@@ -7,19 +7,21 @@ module.exports = class HelloGame extends Game {
             rawInput: true,
             inputsPerSec: 1,
             rawState: true,
-            statesPerSec: 60,
+            statesPerSec: 1,
             rawRender: true,
             rendersPerSec: 60,
 
             canvasWidth: 600,
             canvasHeight: 600,
 
+            rawClientUpdates: true,
             clientUpdatesPerSec: 60,
+            rawServerUpdates: true,
             serverUpdatesPerSec: 60
         });
 
-        this.state.x = 0;
-        this.state.y = 0;
+        this.publicstate.x = 0;
+        this.publicstate.y = 0;
     }
 
     input(player, data) {
@@ -27,7 +29,7 @@ module.exports = class HelloGame extends Game {
     }
 
     update() {
-        this.state.x += 0.1;
-        this.state.y += 0.1;
+        this.publicstate.x += 0.1;
+        this.publicstate.y += 0.1;
     }
 }

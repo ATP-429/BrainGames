@@ -2,7 +2,8 @@
 //This file will send the data to js/games/common/game.js using react,
 //which will then send the data to the server/games/common/game.js
 var game = null,
-    canvas = null;
+    canvas = null,
+    Canvas = null;
 create_game('HelloGame').then(res => {
   var socket = io.connect('http://localhost:3000', {
     query: `id=${res.id}`
@@ -11,16 +12,14 @@ create_game('HelloGame').then(res => {
     console.log(data);
   });
   socket.on('details', async details => {
-    await fetch(`/js/games/${details.name}.js`).then(file => file.text()).then(text => eval.call(window, text));
+    await fetch(`/js/games/${details.name}/${details.name}-base.js`).then(file => file.text()).then(text => eval.call(window, text));
 
-    const Canvas = () => {
+    Canvas = props => {
       [mouse, setMouse] = React.useState({
         x: 0,
         y: 0
       });
       [keys, setKeys] = React.useState({});
-      [inputTaken, setInputTaken] = React.useState(false);
-      [updateDone, setUpdateDone] = React.useState(false);
       [gameState, setGameState] = React.useState({});
 
       getInput = () => {
@@ -34,13 +33,12 @@ create_game('HelloGame').then(res => {
 
 
       React.useEffect(() => {
-        game = eval(`new ${details.name}(socket, details, getInput)`); //Pass the inputs by reference
+        game = eval(`new ${details.name}(socket, details, getInput, setGameState, reactRender)`); //Pass the inputs by reference
 
         canvas = document.getElementById('canvas');
-        setInterval(() => render(canvas), 1000 / details.rendersPerSec);
       }, []);
 
-      render = canvas => {
+      reactRender = () => {
         let bufferCanvas = document.createElement('canvas');
         let ctx = bufferCanvas.getContext('2d');
         bufferCanvas.width = canvas.width;
@@ -54,16 +52,6 @@ create_game('HelloGame').then(res => {
         /*#__PURE__*/
         //The div-canvas will be used for html elements
         React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-          id: "indicators-container"
-        }, /*#__PURE__*/React.createElement("div", {
-          className: "indicator input-taken",
-          active: inputTaken ? 'true' : 'false'
-        }, " "), /*#__PURE__*/React.createElement("div", {
-          className: "indicator",
-          active: inputTaken
-        }, " "), /*#__PURE__*/React.createElement("div", {
-          className: "indicator"
-        }, " ")), /*#__PURE__*/React.createElement("div", {
           id: "div-canvas",
           style: {
             zIndex: 2,
@@ -86,7 +74,15 @@ create_game('HelloGame').then(res => {
             [e.code]: true
           }),
           onKeyUp: e => delete keys[e.code]
-        }, /*#__PURE__*/React.createElement("button", null, "Hello")), /*#__PURE__*/React.createElement("canvas", {
+        }, /*#__PURE__*/React.createElement(props.REACT, {
+          render: reactRender,
+          mouse: mouse,
+          setMouse: setMouse,
+          keys: keys,
+          setKeys: setKeys,
+          gameState: gameState,
+          setGameState: setGameState
+        })), /*#__PURE__*/React.createElement("canvas", {
           style: {
             zIndex: 1
           },
@@ -98,7 +94,7 @@ create_game('HelloGame').then(res => {
       );
     };
 
-    ReactDOM.render( /*#__PURE__*/React.createElement(Canvas, null), document.getElementById('page'));
+    await fetch(`/js/games/${details.name}/${details.name}-react.js`).then(file => file.text()).then(text => eval.call(window, text));
   });
 });
 //# sourceMappingURL=game.js.map

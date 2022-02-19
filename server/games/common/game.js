@@ -10,7 +10,8 @@ module.exports = class Game {
     //          Used for continuous games [Like shooting games, for eg]
     //          as opposed to games like candy crush
     details = {rawInput: false, rawState: false} //Default configurations
-    state = {}; //This will hold the variables that'll be used by the game during execution
+    privatestate = {}; //This will hold the variables ONLY FOR THE SERVER that'll be used by the game during execution, these variables won't be passed to client
+    publicstate = {}; //These variables will be used by either the server or client. They will be passed to client on sendGlobalState() call
     players = []
 
     constructor(details) {
@@ -19,22 +20,62 @@ module.exports = class Game {
         //Again, useful for continuous games like call of duty
         if(this.details.rawState) {
             setInterval(() => {
-                this.sendState();
+                this.sendGlobalState();
             }, 1000/this.details.statesPerSec);
         }
 
-        setInterval(() => {
-            this.update();
-        }, 1000/this.details.serverUpdatesPerSec);
+        if(this.details.rawServerUpdates) {
+            setInterval(() => {
+                this.update();
+            }, 1000/this.details.serverUpdatesPerSec);
+        }
     }
 
     update() {
 
     }
 
-    sendState() {
+    sendGlobalState() {
         for(let player of this.players) {
-            player.socket.emit('state', this.state)
+            player.socket.emit('state', this.publicstate)
+            for(let p of this.players) {
+                player.socket.emit('state', {[p.id]: p.public2state});
+            }
+        }
+    }
+
+    sendAllStates() {
+        for(let player of this.players) {
+            player.socket.emit('state', this.publicstate)
+            for(let p of this.players) {
+                player.socket.emit('state', {[p.id]: p.public2state});
+            }
+            player.socket.emit('state', this.player.publicstate);
+        }
+    }
+
+    sendPlayerState(player) {
+        player.socket.emit('state', player.publicstate);
+        for(let p of this.players) {
+            player.socket.emit('state', {[p.id]: p.public2state});
+        }
+    }
+
+    sendAllPlayerStates() {
+        for(let player of this.players) {
+            player.socket.emit('state', player.publicstate)
+        }
+    }
+
+    sendToPlayer(player, state) {
+        player.socket.emit('state', state);
+    }
+
+    sendPlayersList() {
+        for(let player of this.players) {
+            for(let p of this.players) {
+                player.socket.emit('players', p.id)
+            }
         }
     }
 
@@ -46,10 +87,15 @@ module.exports = class Game {
 
     input(player, data) {
         //console.log(`Received input ${data} from player ${player.id}`);
-        if(data.mouse.click)
-            console.log(`Click at ${data.mouse.x}, ${data.mouse.y} on canvas`);
-        if(data.key && data.key.KeyF)
-            console.log(`Key F pressed`);
+        try {
+            if(data.mouse.click)
+                console.log(`Click at ${data.mouse.x}, ${data.mouse.y} on canvas`);
+            if(data.key && data.key.KeyF)
+                console.log(`Key F pressed`);
+        }
+        catch(e) {
+            console.log("unknown input");
+        }
     }
 
     getDetails() {
