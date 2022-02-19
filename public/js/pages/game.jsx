@@ -3,7 +3,7 @@
 //which will then send the data to the server/games/common/game.js
 var game = null, canvas = null, Canvas = null;
 create_game('HelloGame').then(res => {
-    var socket = io.connect('http://localhost:3000', {query : `id=${res.id}`});
+    var socket = io.connect({query : `id=${res.id}`});
     socket.on('msg', (data) => {
         console.log(data);
     });

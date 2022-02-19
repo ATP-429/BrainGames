@@ -33,13 +33,6 @@ const server = app.listen(port, () => {
     console.log(`Listening to port ${port}`);
 });
 
-io.listen(server, {
-    cors: {
-        origin: "https://example.com",
-        methods: ["GET", "POST"],
-        allowedHeaders: ["my-custom-header"],
-        credentials: true
-    }
-});
+io.listen(server);
 
 responder.loadGameEngine(new GameEngine(io))

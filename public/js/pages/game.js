@@ -5,7 +5,7 @@ var game = null,
     canvas = null,
     Canvas = null;
 create_game('HelloGame').then(res => {
-  var socket = io.connect('http://localhost:3000', {
+  var socket = io.connect({
     query: `id=${res.id}`
   });
   socket.on('msg', data => {
