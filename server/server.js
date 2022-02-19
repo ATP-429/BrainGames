@@ -7,6 +7,7 @@ const http = require('http');
 const path = require('path');
 const responder = require('./responder')
 const socketIO = require('socket.io');
+const cors = require('cors');
 const { v4 : uuidv4 } = require('uuid');
 const GameEngine = require('./game-engine');
 
@@ -23,6 +24,8 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+
+app.use(cors());
 
 app.post('/request', responder.responder); //respond is a function defined in responder.js
 
