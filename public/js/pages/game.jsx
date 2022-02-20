@@ -2,14 +2,21 @@
 //This file will send the data to js/games/common/game.js using react,
 //which will then send the data to the server/games/common/game.js
 var game = null, canvas = null, Canvas = null;
-create_game('HelloGame').then(res => {
-    var socket = io.connect({query : `id=${res.id}`});
+//create_game('HelloGame').then(res => {
+    var socket = io.connect({query : `id=custom-id`});
     socket.on('msg', (data) => {
         console.log(data);
     });
 
     socket.on('details', async (details) => {
         await fetch(`/js/games/${details.name}/${details.name}-base.js`).then(file => file.text()).then((text) => eval.call(window, text));
+        let head  = document.getElementsByTagName('head')[0];
+        let link  = document.createElement('link');
+        link.rel  = 'stylesheet';
+        link.type = 'text/css';
+        link.href = `js/games/${details.name}/${details.name}.css`;
+        link.media = 'all';
+        head.appendChild(link);
 
         Canvas = (props) => {
             [mouse, setMouse] = React.useState({x: 0, y: 0});
@@ -52,6 +59,10 @@ create_game('HelloGame').then(res => {
                         onKeyDown={e => setKeys({...keys, [e.code]: true})}
                         onKeyUp={e => delete keys[e.code]}>
                         <props.REACT render={reactRender} mouse={mouse} setMouse={setMouse} keys={keys} setKeys={setKeys} gameState={gameState} setGameState={setGameState}/>
+                        <div id="indicators-container">
+                            <div className='indicator input-taken border border-dark rounded' active={gameState.inputTaken ? 'true' : 'false'}> </div>
+                            <div className='indicator update-done border border-dark rounded' active={gameState.updateDone ? 'true' : 'false'}> </div>
+                        </div>
                     </div>
                     <canvas
                         style={{zIndex: 1}}
@@ -66,4 +77,4 @@ create_game('HelloGame').then(res => {
         await fetch(`/js/games/${details.name}/${details.name}-react.js`).then(file => file.text()).then((text) => eval.call(window, text));
     })
 
-});
+//});

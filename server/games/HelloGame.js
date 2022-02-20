@@ -20,16 +20,19 @@ module.exports = class HelloGame extends Game {
             serverUpdatesPerSec: 60
         });
 
-        this.publicstate.x = 0;
-        this.publicstate.y = 0;
+        this.publicstate.score = 0;
     }
 
     input(player, data) {
         super.input(player, data);
+        if(data.add)
+            this.publicstate.score++;
+        else if(data.sub)
+            this.publicstate.score--;
+        this.sendAllStates();
     }
 
     update() {
-        this.publicstate.x += 0.1;
-        this.publicstate.y += 0.1;
+
     }
 }

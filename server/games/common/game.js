@@ -50,7 +50,7 @@ module.exports = class Game {
             for(let p of this.players) {
                 player.socket.emit('state', {[p.id]: p.public2state});
             }
-            player.socket.emit('state', this.player.publicstate);
+            player.socket.emit('state', player.publicstate);
         }
     }
 
@@ -81,21 +81,24 @@ module.exports = class Game {
 
     addPlayer(socket) {
         let player = new Player(socket);
-        player.addInputListener(this.input);
+        socket.on('input', (data, callback) => {
+            this.input(player, data);
+            callback('ok');
+        })
         this.players.push(player);
     }
 
     input(player, data) {
         //console.log(`Received input ${data} from player ${player.id}`);
-        try {
-            if(data.mouse.click)
-                console.log(`Click at ${data.mouse.x}, ${data.mouse.y} on canvas`);
-            if(data.key && data.key.KeyF)
-                console.log(`Key F pressed`);
-        }
-        catch(e) {
-            console.log("unknown input");
-        }
+        // try {
+        //     if(data.mouse.click)
+        //         console.log(`Click at ${data.mouse.x}, ${data.mouse.y} on canvas`);
+        //     if(data.key && data.key.KeyF)
+        //         console.log(`Key F pressed`);
+        // }
+        // catch(e) {
+        //     console.log("unknown input");
+        // }
     }
 
     getDetails() {

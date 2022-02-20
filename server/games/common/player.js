@@ -11,11 +11,4 @@ module.exports = class Player {
         this.socket = socket;
         this.id = uuidv4();
     }
-
-    addInputListener(inputListener) {
-        this.socket.on('input', (data, callback) => {
-            inputListener(this, data);
-            callback('ok');
-        })
-    }
 }

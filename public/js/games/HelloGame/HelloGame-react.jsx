@@ -1,10 +1,15 @@
 //This is the react game file. All client side logic involving react will run here
 REACT = (props) => {
     return (
-        <div id="indicators-container">
-            <div className='indicator input-taken border border-dark rounded' active={gameState.inputTaken ? 'true' : 'false'}> </div>
-            <div className='indicator update-done border border-dark rounded' active={gameState.updateDone ? 'true' : 'false'}> </div>
-        </div>
+        <React.Fragment>
+            <div id="score">
+                Score: {props.gameState.score}
+            </div>
+            <div id="btn-container">
+                <button onClick={() => game.sendImmediateInput({add: true})} className="btn btn-success" id="add-btn">Click Me!</button>
+                <button onClick={() => game.sendImmediateInput({sub: true})} className="btn btn-danger" id="sub-btn">DON'T CLICK!</button>
+            </div>
+        </React.Fragment>
     )
 }
 
