@@ -8,7 +8,7 @@ const responder = require('./responder')
 const socketIO = require('socket.io');
 const { v4 : uuidv4 } = require('uuid');
 const Game = require('./games/common/game');
-const HelloGame = require('./games/HelloGame');
+const HelloGame = require('./games/HelloGame/HelloGame');
 
 var currentGames = {}
 
@@ -19,8 +19,9 @@ module.exports = class GameEngine {
             let game = currentGames[socket.handshake.query.id];
             if(game != undefined) {
                 socket.emit('msg', `Connected to game ${socket.handshake.query.id}`);
-                game.addPlayer(socket);
                 socket.emit('details', game.getDetails());
+                socket.on('ready', (data) => game.addPlayer(socket)); //Client initialization is done, so proceed by adding the player to the game
+                socket.on('disconnect', (data) => game.removePlayer(socket));
             }
             else {
                 socket.emit('msg', "Game not found");

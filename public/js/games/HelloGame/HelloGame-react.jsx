@@ -3,7 +3,11 @@ REACT = (props) => {
     return (
         <React.Fragment>
             <div id="score">
-                Score: {props.gameState.score}
+                {
+                    props.gameState.players?.map((_id, index) => (
+                        <React.Fragment key={index}>{_id} : {props.gameState[_id]?._score}<br/></React.Fragment>
+                    ))
+                }
             </div>
             <div id="btn-container">
                 <button onClick={() => game.sendImmediateInput({add: true})} className="btn btn-success" id="add-btn">Click Me!</button>

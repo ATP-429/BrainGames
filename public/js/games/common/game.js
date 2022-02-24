@@ -1,9 +1,9 @@
 //This file contains functions for client side management of games, like sending input/output etc
 var Game = class {
-    state = {}; //This will hold the variables that'll be used by the game during execution
-    players = []; //Holds the ids of players in the game
 
     constructor(socket, details, getInput, setGameState) {
+        this.state = {players: {}}; //This will hold the variables that'll be used by the game during execution
+
         this.socket = socket;
         this.details = details;
         this.getInput = getInput;
@@ -30,6 +30,8 @@ var Game = class {
 
         socket.on('state', state => this.updateState(state));
         socket.on('players', list => this.updatePlayersList(list));
+
+        socket.emit('ready', 1); //Tell the server that client initialization is done, so server can proceed.
     }
 
     appendInput() {
@@ -53,7 +55,7 @@ var Game = class {
     }
 
     updatePlayersList(list) {
-        players = list;
+        this.state.players = list;
     }
 
     //Updates the state of the game, and overwrites values passed from the new state
@@ -76,7 +78,7 @@ var Game = class {
 
     //Update the game state variables in the react app
     updateReact() {
-        this.setGameState({...this.state}); //We have to use array spread because https://stackoverflow.com/questions/56266575/why-is-usestate-not-triggering-re-render
+        this.setGameState(JSON.parse(JSON.stringify(this.state))); //We have to make a deep clone of state because https://stackoverflow.com/questions/56266575/why-is-usestate-not-triggering-re-render
     }
 
     indicateInput() {

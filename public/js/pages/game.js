@@ -111,4 +111,3 @@ socket.on('details', async details => {
 
   await fetch(`/js/games/${details.name}/${details.name}-react.js`).then(file => file.text()).then(text => eval.call(window, text));
 }); //});
-//# sourceMappingURL=game.js.map

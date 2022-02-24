@@ -102,4 +102,3 @@ const LoginForm = () => {
 };
 
 ReactDOM.render( /*#__PURE__*/React.createElement(LoginForm, null), document.getElementById('page'));
-//# sourceMappingURL=login.js.map

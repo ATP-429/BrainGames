@@ -2,7 +2,9 @@
 REACT = props => {
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     id: "score"
-  }, "Score: ", props.gameState.score), /*#__PURE__*/React.createElement("div", {
+  }, props.gameState.players?.map((_id, index) => /*#__PURE__*/React.createElement(React.Fragment, {
+    key: index
+  }, _id, " : ", props.gameState[_id]?._score, /*#__PURE__*/React.createElement("br", null)))), /*#__PURE__*/React.createElement("div", {
     id: "btn-container"
   }, /*#__PURE__*/React.createElement("button", {
     onClick: () => game.sendImmediateInput({
@@ -22,4 +24,3 @@ REACT = props => {
 ReactDOM.render( /*#__PURE__*/React.createElement(Canvas, {
   REACT: REACT
 }), document.getElementById('page'));
-//# sourceMappingURL=HelloGame-react.js.map

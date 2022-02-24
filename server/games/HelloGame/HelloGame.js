@@ -1,4 +1,5 @@
-const Game = require('./common/game');
+const Game = require('./../common/game');
+const HelloGamePlayer = require('./HelloGamePlayer');
 
 module.exports = class HelloGame extends Game {
     constructor() {
@@ -19,20 +20,27 @@ module.exports = class HelloGame extends Game {
             rawServerUpdates: true,
             serverUpdatesPerSec: 60
         });
-
-        this.publicstate.score = 0;
     }
 
     input(player, data) {
         super.input(player, data);
         if(data.add)
-            this.publicstate.score++;
+            player._score++;
         else if(data.sub)
-            this.publicstate.score--;
+            player._score--;
         this.sendAllStates();
     }
 
     update() {
 
+    }
+
+    onPlayerJoin(player) {
+        super.onPlayerJoin(player);
+    }
+
+    //Overrides method from parent class to create our own HelloGamePlayer
+    createPlayer(socket) {
+        return new HelloGamePlayer(socket);
     }
 }
