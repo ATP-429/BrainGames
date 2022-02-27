@@ -3,7 +3,7 @@ var Game = class {
 
     constructor(socket, details, getInput, setGameState) {
         this.state = {players: {}}; //This will hold the variables that'll be used by the game during execution
-
+        this.state.pdata = {};
         this.socket = socket;
         this.details = details;
         this.getInput = getInput;
@@ -54,8 +54,20 @@ var Game = class {
         });
     }
 
+    sendMessage(msg) {
+        this.socket.emit('chat', msg);
+    }
+
     updatePlayersList(list) {
         this.state.players = list;
+        for(let id in this.state.pdata) {
+            if(list.indexOf(id) == -1) {
+                delete this.state.pdata[id];
+            }
+        }
+
+        this.indicateUpdate();
+        this.updateReact();
     }
 
     //Updates the state of the game, and overwrites values passed from the new state
@@ -63,12 +75,17 @@ var Game = class {
     //update saying one object's visibility should be made false
     //this.state will hold local variables, that the server doesn't care about
     updateState(newState) {
-        this.state = {...this.state, ...newState}; //Update state variables, if any changes
+        this.state = _.merge(this.state, newState); //deeply update nested objects. https://stackoverflow.com/questions/46545026/a-better-way-to-deep-update-an-object-in-es6-with-lodash-or-any-other-library
+        //basically, the same thing as below but for all potential nested objects, not just pdata
+        //this.state = {...this.state, ...newState, pdata: {...this.state.pdata, ...newState.pdata}}; //Update state variables, if any changes
         //NOTE: We MUST assign state to this.state after the above updation,
         //otherwise reference to this.state changes, and you can't use this state variable to modify this.state anymore
-
         this.indicateUpdate();
         this.updateReact();
+
+        if(this.details.renderOnUpdate) {
+            this.reactRender();
+        }
     }
 
     //Override this method to run your own game logic. This method will run clientUpdatesPerSec number of times per second

@@ -5,12 +5,9 @@ module.exports = class HelloGame extends Game {
     constructor() {
         super({
             name: 'HelloGame',
-            rawInput: true,
-            inputsPerSec: 1,
-            rawState: true,
-            statesPerSec: 1,
             rawRender: true,
             rendersPerSec: 60,
+            renderOnUpdate: true,
 
             canvasWidth: 600,
             canvasHeight: 600,

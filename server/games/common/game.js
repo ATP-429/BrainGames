@@ -11,6 +11,7 @@ module.exports = class Game {
     //          as opposed to games like candy crush
     $details = {rawInput: false, rawState: false} //Default configurations
     $players = []
+    $chats_count = 0
 
     constructor(details) {
         this.$details = {...this.$details, ...details};
@@ -43,24 +44,38 @@ module.exports = class Game {
     //Send ALL of the variables that the client has access to
     sendAllStates() {
         for(let player of this.$players) {
-            player.emit('state', this.getPublicVars())
+            let pdata = {};
             for(let p of this.$players) {
-                player.emit('state', {[p.$id]: p.getGlobalVars()});
+                pdata[p.$id] = p.getGlobalVars();
             }
-            player.emit('state', player.getPlayerVars());
+            player.emit('state', {pdata: pdata, ...this.getPublicVars()});
         }
     }
 
     //Send only the players' variables to themselves
     sendAllPlayerStates() {
         for(let player of this.$players) {
-            player.emit('state', player.getPlayerVars())
+            player.emit('state', {pdata: {[player.$id]: player.getPlayerVars()}});
         }
     }
 
     //Send specific update to specific player
     sendToPlayer(player, state) {
         player.emit('state', state);
+    }
+
+    sendStateToAllPlayers(state) {
+        for(let player of this.$players) {
+            player.emit('state', state);
+        }
+    }
+
+    sendAllStatesToPlayer(player) {
+        let pdata = {};
+        for(let p of this.$players) {
+            pdata[p.$id] = p.getGlobalVars();
+        }
+        player.emit('state', {pdata: pdata, ...this.getPublicVars()});
     }
 
     //Send players ids to all players
@@ -75,7 +90,13 @@ module.exports = class Game {
         socket.on('input', (data, callback) => {
             this.input(player, data);
             callback('ok');
-        })
+        });
+
+        socket.on('chat', data => {
+            this.sendStateToAllPlayers({chat: {[this.$chats_count]: {name: player.$id, content: data}}});
+            this.$chats_count++;
+        });
+
         this.$players.push(player);
         this.onPlayerJoin(player);
     }
@@ -94,6 +115,7 @@ module.exports = class Game {
 
     onPlayerJoin(player) {
         this.sendPlayersList();
+        this.sendAllStates();
     }
 
     onPlayerRemove(player) {

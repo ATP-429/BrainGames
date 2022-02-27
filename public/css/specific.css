@@ -1,17 +1,81 @@
 /* GAME PAGE */
 
+#game-page {
+    display: grid;
+    width: 100vw;
+    height: 100vh;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+}
+
+
+/* chat messages */
+.chat-content {
+    overflow-wrap:break-word;
+    padding:5px;
+    margin-bottom: 5px;
+    border:solid;
+    border-radius:20px;
+}
+
+.chat-name {
+    overflow: hidden;
+}
+
+#send {
+    position:sticky;
+    height:40px;
+    width:25%;
+    float:right;
+    bottom:1px;
+}
+#chat {
+    position:sticky;
+    height:40px;
+    width:75%;
+    float:left;
+    bottom:1px;
+}
+
+#chatbox {
+    position: relative;
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+    padding: 5px;
+    right: 2px;
+    overflow: scroll;
+}
+
+/* players list */
+#players {
+    position: relative;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+/* game content */
+#game-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
 #div-canvas {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
 
 #canvas {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
 
 #indicators-container {

@@ -21,6 +21,42 @@ socket.on('details', async details => {
   link.media = 'all';
   head.appendChild(link);
 
+  Chatbox = props => {
+    [msg, setMsg] = React.useState("");
+    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+      id: "chatbox",
+      className: "border"
+    }, Object.keys(props.chat).map(key => /*#__PURE__*/React.createElement(React.Fragment, {
+      key: key
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "chat-msg"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "chat-name"
+    }, props.chat[key].name), /*#__PURE__*/React.createElement("div", {
+      className: "chat-content"
+    }, props.chat[key].content)))), /*#__PURE__*/React.createElement("input", {
+      value: msg,
+      type: "text",
+      onKeyUp: e => {
+        if (e.key == 'Enter') {
+          props.sendMsg(msg);
+          setMsg("");
+        }
+      },
+      onInput: e => setMsg(e.target.value),
+      className: "form-control",
+      id: "chat",
+      placeholder: "Enter a message..."
+    }), /*#__PURE__*/React.createElement("button", {
+      onClick: () => {
+        props.sendMsg(msg);
+        setMsg("");
+      },
+      className: "btn btn-primary",
+      id: "send"
+    }, "Send")));
+  };
+
   Canvas = props => {
     [mouse, setMouse] = React.useState({
       x: 0,
@@ -59,6 +95,8 @@ socket.on('details', async details => {
       /*#__PURE__*/
       //The div-canvas will be used for html elements
       React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+        id: "game-content"
+      }, /*#__PURE__*/React.createElement("div", {
         id: "div-canvas",
         style: {
           zIndex: 2,
@@ -105,6 +143,14 @@ socket.on('details', async details => {
         height: details.canvasHeight,
         id: "canvas",
         className: "border"
+      })), /*#__PURE__*/React.createElement("div", {
+        id: "players",
+        className: "border"
+      }, gameState.players?.map((_id, index) => /*#__PURE__*/React.createElement(React.Fragment, {
+        key: index
+      }, _id, " : ", gameState.pdata[_id]?._score, /*#__PURE__*/React.createElement("br", null)))), /*#__PURE__*/React.createElement(Chatbox, {
+        chat: gameState.chat ? gameState.chat : {},
+        sendMsg: () => game.sendMessage(msg)
       }))
     );
   };
