@@ -5,16 +5,8 @@ const {ObjectId} = require('mongodb');
 const express = require('express');
 const bcrypt = require('bcryptjs');
 
-const uri = "mongodb://127.0.0.1:27017";
+const uri = "mongodb+srv://ATP429:admin@cluster0.slnag.mongodb.net/test";
 const client = new MongoClient(uri);
-
-(async () => {
-    try {
-        await client.connect();
-    } catch(e) {
-        console.error(e);
-    }
-})();
 
 var log = (data) => {
     console.log(data);
@@ -60,5 +52,21 @@ module.exports =
             else
                 return id;
         });
+    },
+
+    connect: async () => {
+        try {
+            await client.connect();
+        } catch(e) {
+            console.error(e);
+        }
+    },
+
+    disconnect: async () => {
+        try {
+            await client.close();
+        } catch(e) {
+            console.error(e);
+        }
     }
 }

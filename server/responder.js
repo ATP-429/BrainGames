@@ -2,8 +2,6 @@
 
 const engine = require('./engine');
 
-globalThis.gameEngine = 'hi';
-
 module.exports = {
     responder: async (actualRequest, actualResponse) => {
         let req = actualRequest.body;
@@ -11,6 +9,9 @@ module.exports = {
         let success = () => {res['success'] = 1};
         let fail = () => {res['success'] = 0};
         let detail = (str) => {res['detail'] = str};
+
+        await engine.connect(); //CONNECT TO DB
+
         switch(req['request_type']) {
             case 'login':
                 await engine.login(req['username'], req['password']).then((user) => {
@@ -57,6 +58,9 @@ module.exports = {
                 fail();
                 detail("Unkown request");
         }
+
+        engine.disconnect(); //DISCONNECT FROM DB
+
         actualResponse.end(JSON.stringify(res));
     },
 
