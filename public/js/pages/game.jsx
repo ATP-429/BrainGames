@@ -83,7 +83,13 @@ var game = null, canvas = null, Canvas = null;
                             onMouseMove={e => {setMouse({...mouse, x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY})}}
                             onKeyDown={e => setKeys({...keys, [e.code]: true})}
                             onKeyUp={e => delete keys[e.code]}>
+
+
+                            {/*THIS IS THE REACT ELEMENT THAT THE SPECIFIC GAME WILL PASS TO US*/}
+
                             <props.REACT render={reactRender} mouse={mouse} setMouse={setMouse} keys={keys} setKeys={setKeys} gameState={gameState} setGameState={setGameState}/>
+
+
                             <div id="indicators-container">
                                 <div className='indicator input-taken border border-dark rounded' active={gameState.inputTaken ? 'true' : 'false'}> </div>
                                 <div className='indicator update-done border border-dark rounded' active={gameState.updateDone ? 'true' : 'false'}> </div>

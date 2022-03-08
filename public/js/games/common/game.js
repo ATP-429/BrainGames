@@ -75,7 +75,14 @@ var Game = class {
     //update saying one object's visibility should be made false
     //this.state will hold local variables, that the server doesn't care about
     updateState(newState) {
-        this.state = _.merge(this.state, newState); //deeply update nested objects. https://stackoverflow.com/questions/46545026/a-better-way-to-deep-update-an-object-in-es6-with-lodash-or-any-other-library
+        //deeply update nested objects. https://stackoverflow.com/questions/46545026/a-better-way-to-deep-update-an-object-in-es6-with-lodash-or-any-other-library
+        //NOTE: Using mergeWith and providing a custom function, we make it so that arrays are NOT merged.
+        //For eg, if this.state = {a: [3, 7]} and newState = {a: [3, 2]}, this.state will become {a: [3, 2]} NOT {a: [3, 7, 2]}
+        this.state = _.mergeWith(this.state, newState, (objValue, srcValue, key, object, source, stack) => {
+            if(Object.prototype.toString.call(newState[key]) === '[object Array]') {
+                return newState[key]; //If object we are merging is an array, just add it to this.state directly, no merging
+            }
+        });
         //basically, the same thing as below but for all potential nested objects, not just pdata
         //this.state = {...this.state, ...newState, pdata: {...this.state.pdata, ...newState.pdata}}; //Update state variables, if any changes
         //NOTE: We MUST assign state to this.state after the above updation,

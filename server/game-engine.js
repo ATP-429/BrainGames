@@ -9,6 +9,7 @@ const socketIO = require('socket.io');
 const { v4 : uuidv4 } = require('uuid');
 const Game = require('./games/common/game');
 const HelloGame = require('./games/HelloGame/HelloGame');
+const DescribeGame = require('./games/DescribeGame/DescribeGame');
 
 var currentGames = {}
 
@@ -29,7 +30,7 @@ module.exports = class GameEngine {
             }
         })
 
-        this.create_game('HelloGame');
+        this.create_game('DescribeGame');
     }
 
     //Create a game given the game name and return its id
