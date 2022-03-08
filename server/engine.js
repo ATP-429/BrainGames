@@ -4,8 +4,8 @@ const {MongoClient} = require('mongodb');
 const {ObjectId} = require('mongodb');
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const uri = require('./mongodburi');
 
-const uri = "mongodb+srv://ATP429:admin@cluster0.slnag.mongodb.net/test";
 const client = new MongoClient(uri);
 
 var log = (data) => {
