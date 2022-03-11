@@ -6,7 +6,7 @@ module.exports = class DescribeGamePlayer extends Player {
      * Variables starting with neither in a player class, are variables that will be shared only with that particular player in the game [For example, the cards held by a player in a gambling game]
      */
 
-    
+    _score = 0;
 
     constructor(socket) {
         super(socket);

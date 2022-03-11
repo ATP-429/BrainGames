@@ -1,8 +1,12 @@
 .shape {
     width: 64px;
     height: 64px;
+
     font-family: "Sans-serif";
-    font-size: 32px;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    font-size: 24px;
+    color: white;
+
     text-align: center;
     line-height: 64px; /* For putting text in the vertical center */
 }
@@ -12,9 +16,21 @@ div[type="triangle"] {
 }
 
 div[type="circle"] {
-    border-radius: 64px;
+    clip-path: circle(50% at 50% 50%);
 }
 
 div[type="square"] {
     /* do nothing */
+}
+
+div[type="hexagon"] {
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+}
+
+div[type="star"] {
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+div[type="unknown"] {
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
 }
