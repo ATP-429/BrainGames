@@ -24,17 +24,18 @@ socket.on('details', async details => {
   Chatbox = props => {
     [msg, setMsg] = React.useState("");
     return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-      id: "chatbox",
-      className: "border"
-    }, Object.keys(props.chat).map(key => /*#__PURE__*/React.createElement(React.Fragment, {
+      id: "chatbox"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "title"
+    }, "CHATBOX"), /*#__PURE__*/React.createElement("hr", null), Object.keys(props.chat).map(key => /*#__PURE__*/React.createElement(React.Fragment, {
       key: key
     }, /*#__PURE__*/React.createElement("div", {
       className: "chat-msg"
     }, /*#__PURE__*/React.createElement("div", {
-      className: "chat-name"
-    }, props.chat[key].name), /*#__PURE__*/React.createElement("div", {
       className: "chat-content"
-    }, props.chat[key].content)))), /*#__PURE__*/React.createElement("input", {
+    }, props.chat[key].content), /*#__PURE__*/React.createElement("div", {
+      className: "chat-name"
+    }, props.chat[key].name)))), /*#__PURE__*/React.createElement("input", {
       value: msg,
       type: "text",
       onKeyUp: e => {
@@ -55,6 +56,16 @@ socket.on('details', async details => {
       className: "btn btn-primary",
       id: "send"
     }, "Send")));
+  };
+
+  PlayerCard = props => {
+    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+      class: "player-card"
+    }, /*#__PURE__*/React.createElement("div", {
+      class: "title"
+    }, props.playerName), /*#__PURE__*/React.createElement("div", {
+      class: "score"
+    }, "Score : ", props.score)));
   };
 
   Canvas = props => {
@@ -95,7 +106,21 @@ socket.on('details', async details => {
       /*#__PURE__*/
       //The div-canvas will be used for html elements
       React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+        id: "players",
+        className: "border"
+      }, /*#__PURE__*/React.createElement("div", {
+        class: "title"
+      }, "PLAYERS"), /*#__PURE__*/React.createElement("hr", null), gameState.players?.map((_id, index) => /*#__PURE__*/React.createElement(PlayerCard, {
+        playerName: _id,
+        score: gameState.pdata[_id]?._score,
+        key: index
+      }))), /*#__PURE__*/React.createElement("div", {
         id: "game-content"
+      }, /*#__PURE__*/React.createElement("img", {
+        src: "https://i.imgur.com/mOaTPx8.png",
+        id: "logo"
+      }), /*#__PURE__*/React.createElement("div", {
+        id: "container"
       }, /*#__PURE__*/React.createElement("div", {
         id: "div-canvas",
         style: {
@@ -123,6 +148,7 @@ socket.on('details', async details => {
         render: reactRender,
         mouse: mouse,
         setMouse: setMouse,
+        game: game,
         keys: keys,
         setKeys: setKeys,
         gameState: gameState,
@@ -143,12 +169,7 @@ socket.on('details', async details => {
         height: details.canvasHeight,
         id: "canvas",
         className: "border"
-      })), /*#__PURE__*/React.createElement("div", {
-        id: "players",
-        className: "border"
-      }, gameState.players?.map((_id, index) => /*#__PURE__*/React.createElement(React.Fragment, {
-        key: index
-      }, _id, " : ", gameState.pdata[_id]?._score, /*#__PURE__*/React.createElement("br", null)))), /*#__PURE__*/React.createElement(Chatbox, {
+      }))), /*#__PURE__*/React.createElement(Chatbox, {
         chat: gameState.chat ? gameState.chat : {},
         sendMsg: () => game.sendMessage(msg)
       }))

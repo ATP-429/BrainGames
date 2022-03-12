@@ -1,35 +1,55 @@
 /* GAME PAGE */
 
 #game-page {
-    display: grid;
+    display: flex;
     width: 100vw;
     height: 100vh;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr;
+    justify-content: center;
+    padding: 10px;
 }
 
+.title {
+    text-align: center;
+}
+
+.player-card {
+    margin-left: 5px;
+    margin-top: 5px;
+    margin-right: 5px;
+    padding: 5px;
+    border: solid 1px;
+}
 
 /* chat messages */
 .chat-content {
     overflow-wrap:break-word;
     padding:5px;
-    margin-bottom: 5px;
-    border:solid;
-    border-radius:20px;
+    border:solid green 1px;
+    border-radius: 3px;
+    background-color: rgb(179, 244, 208);
 }
 
 .chat-name {
     overflow: hidden;
+    font-size: 0.8rem;
+    margin-bottom: 15px;
+    text-align: right;
+    right: 2px;
 }
 
-#send {
+.chat-msg {
+
+}
+
+#chatbox #send {
     position:sticky;
     height:40px;
     width:25%;
     float:right;
     bottom:1px;
 }
-#chat {
+
+#chatbox #chat {
     position:sticky;
     height:40px;
     width:75%;
@@ -39,43 +59,49 @@
 
 #chatbox {
     position: relative;
-    grid-column-start: 3;
-    grid-column-end: 4;
-    grid-row-start: 1;
-    grid-row-end: 2;
-
     padding: 5px;
     right: 2px;
     overflow: scroll;
+    border: solid 1px;
+
+    max-height: 800px;
+    margin-left: 10px;
 }
 
 /* players list */
 #players {
     position: relative;
-    grid-column-start: 1;
-    grid-column-end: 2;
-    grid-row-start: 1;
-    grid-row-end: 2;
+
+    left: 0px;
+    max-height: 800px;
 }
 
 /* game content */
 #game-content {
-    position: relative;
     display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-left: 10px;
     align-items: center;
-    justify-content: center;
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 1;
-    grid-row-end: 2;
 }
 
-#div-canvas {
-    position: absolute;
+#game-content #logo {
+    position: relative;
 }
 
-#canvas {
+#game-content #container {
+    position: relative;
+    margin-top: 10px;
+}
+
+#game-content #div-canvas {
+    position: relative;
+}
+
+#game-content #canvas {
     position: absolute;
+    left: 0px;
+    top: 0px;
 }
 
 #indicators-container {

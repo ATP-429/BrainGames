@@ -23,19 +23,33 @@ var game = null, canvas = null, Canvas = null;
 
             return (
                 <React.Fragment>
-                    <div id="chatbox" className="border">
+                    <div id="chatbox">
+                        <div className="title">CHATBOX</div>
+                        <hr/>
                         {
                             Object.keys(props.chat).map((key) => (
                                 <React.Fragment key={key}>
                                     <div className="chat-msg">
-                                        <div className="chat-name">{props.chat[key].name}</div>
                                         <div className="chat-content">{props.chat[key].content}</div>
+                                        <div className="chat-name">{props.chat[key].name}</div>
                                     </div>
                                 </React.Fragment>
                             ))
                         }
                         <input value={msg} type="text" onKeyUp={(e) => {if(e.key == 'Enter') { props.sendMsg(msg); setMsg(""); }}} onInput={(e) => setMsg(e.target.value)} className="form-control" id="chat" placeholder="Enter a message..."></input>
                         <button onClick={() => { props.sendMsg(msg); setMsg(""); }} className="btn btn-primary" id="send">Send</button>
+                    </div>
+                </React.Fragment>
+            )
+        }
+
+        PlayerCard = (props) => {
+
+            return (
+                <React.Fragment>
+                    <div class="player-card">
+                        <div class="title">{props.playerName}</div>
+                        <div class="score">Score : {props.score}</div>
                     </div>
                 </React.Fragment>
             )
@@ -74,40 +88,45 @@ var game = null, canvas = null, Canvas = null;
             return (
                 //The div-canvas will be used for html elements
                 <React.Fragment>
-                    <div id="game-content">
-                        <div id="div-canvas"
-                            style={{zIndex: 2, width: details.canvasWidth, height: details.canvasHeight}}
-                            tabIndex="0" //We have to do this to accept keyboard inputs from the canvas
-                            onMouseDown={e => setMouse({...mouse, click: true})}
-                            onMouseUp={e => delete mouse['click']}
-                            onMouseMove={e => {setMouse({...mouse, x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY})}}
-                            onKeyDown={e => setKeys({...keys, [e.code]: true})}
-                            onKeyUp={e => delete keys[e.code]}>
-
-
-                            {/*THIS IS THE REACT ELEMENT THAT THE SPECIFIC GAME WILL PASS TO US*/}
-
-                            <props.REACT render={reactRender} mouse={mouse} setMouse={setMouse} keys={keys} setKeys={setKeys} gameState={gameState} setGameState={setGameState}/>
-
-
-                            <div id="indicators-container">
-                                <div className='indicator input-taken border border-dark rounded' active={gameState.inputTaken ? 'true' : 'false'}> </div>
-                                <div className='indicator update-done border border-dark rounded' active={gameState.updateDone ? 'true' : 'false'}> </div>
-                            </div>
-                        </div>
-                        <canvas
-                            style={{zIndex: 1}}
-                            width={details.canvasWidth}
-                            height={details.canvasHeight}
-                            id="canvas" className="border">
-                        </canvas>
-                    </div>
                     <div id="players" className="border">
+                        <div class="title">PLAYERS</div>
+                        <hr/>
                         {
                             gameState.players?.map((_id, index) => (
-                                <React.Fragment key={index}>{_id} : {gameState.pdata[_id]?._score}<br/></React.Fragment>
+                                <PlayerCard playerName={_id} score={gameState.pdata[_id]?._score}key={index}/>
                             ))
                         }
+                    </div>
+                    <div id="game-content">
+                        <img src="https://i.imgur.com/mOaTPx8.png" id="logo"></img>
+                        <div id="container">
+                            <div id="div-canvas"
+                                style={{zIndex: 2, width: details.canvasWidth, height: details.canvasHeight}}
+                                tabIndex="0" //We have to do this to accept keyboard inputs from the canvas
+                                onMouseDown={e => setMouse({...mouse, click: true})}
+                                onMouseUp={e => delete mouse['click']}
+                                onMouseMove={e => {setMouse({...mouse, x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY})}}
+                                onKeyDown={e => setKeys({...keys, [e.code]: true})}
+                                onKeyUp={e => delete keys[e.code]}>
+
+
+                                {/*NOTE:THIS IS THE REACT ELEMENT THAT THE SPECIFIC GAME WILL PASS TO US*/}
+
+                                <props.REACT render={reactRender} mouse={mouse} setMouse={setMouse} game={game} keys={keys} setKeys={setKeys} gameState={gameState} setGameState={setGameState}/>
+
+
+                                <div id="indicators-container">
+                                    <div className='indicator input-taken border border-dark rounded' active={gameState.inputTaken ? 'true' : 'false'}> </div>
+                                    <div className='indicator update-done border border-dark rounded' active={gameState.updateDone ? 'true' : 'false'}> </div>
+                                </div>
+                            </div>
+                            <canvas
+                                style={{zIndex: 1}}
+                                width={details.canvasWidth}
+                                height={details.canvasHeight}
+                                id="canvas" className="border">
+                            </canvas>
+                        </div>
                     </div>
                     <Chatbox chat={gameState.chat ? gameState.chat : {}} sendMsg={() => game.sendMessage(msg)}/>
                 </React.Fragment>
