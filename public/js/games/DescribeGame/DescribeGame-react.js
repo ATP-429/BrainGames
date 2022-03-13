@@ -31,11 +31,17 @@ renderShape = (i, shape) => {
 
 REACT = props => {
   [ans, setAns] = React.useState("");
+  React.useEffect(() => {
+    if (props.gameState.input) {
+      console.log("Test");
+      setAns("");
+    }
+  }, [props.gameState.input]);
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     id: "shape-container"
   }, (() => {
     if (props.gameState.input) {
-      return /*#__PURE__*/React.createElement(React.Fragment, null, Array.from(Array(props.gameState._nShapes)).map((_, i) => renderShape(i, null)), /*#__PURE__*/React.createElement("input", {
+      return /*#__PURE__*/React.createElement(React.Fragment, null, props.gameState.win == 0 ? Array.from(Array(props.gameState._nShapes)).map((_, i) => renderShape(i, null)) : props.gameState._shapes?.map((shape, i) => renderShape(i, shape)), /*#__PURE__*/React.createElement("input", {
         type: "text",
         value: ans,
         onKeyUp: e => {
@@ -43,12 +49,12 @@ REACT = props => {
             props.game.sendImmediateInput({
               answer: ans
             });
-            setAns("");
           }
         },
         onInput: e => setAns(e.target.value),
         placeholder: props.gameState.query,
-        disabled: props.gameState.win != 0
+        disabled: props.gameState.win != 0,
+        autoFocus: true
       }), props.gameState.win == 1 ? /*#__PURE__*/React.createElement(React.Fragment, null, " \u2705 ") : null, props.gameState.win == -1 ? /*#__PURE__*/React.createElement(React.Fragment, null, " \u274C ") : null);
     } else {
       return props.gameState._shapes?.map((shape, i) => renderShape(i, shape));

@@ -8,7 +8,7 @@ module.exports = class DescribeGame extends Game {
     $shape_texts = ['A', 'B', 'C', 'D'];
     $shape_colors = ['red', 'green', 'blue', 'yellow'];
     $queries = ['type', 'text', 'color'];
-    _nShapes = 2;
+    _nShapes = 3;
     _shapes = [];
 
     constructor() {
@@ -67,14 +67,16 @@ module.exports = class DescribeGame extends Game {
 
     input(player, data) {
         super.input(player, data);
-        if(data.answer.toUpperCase() === this.$ans.toUpperCase()) {
-            console.log("Player won");
-            player._score++;
-            this.sendToPlayer(player, {win: 1});
+        if(data.answer != undefined) {
             this.sendAllStates();
-        }
-        else {
-            this.sendToPlayer(player, {win: -1});
+            this.sendToPlayer(player, {_shapes: this.$shapes});
+            if(data.answer.toUpperCase() === this.$ans.toUpperCase()) {
+                player._score++;
+                this.sendToPlayer(player, {win: 1});
+            }
+            else {
+                this.sendToPlayer(player, {win: -1});
+            }
         }
     }
 

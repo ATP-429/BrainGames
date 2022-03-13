@@ -3,6 +3,14 @@
     align-items: center;
 }
 
+#shape-container > *:first-child {
+    margin-left: 5px;
+}
+
+#shape-container > *+* { /* select everything except the first element https://coderwall.com/p/uugurw/css-selector-trick-select-all-elements-except-the-first*/
+    margin-left: 20px;
+}
+
 .shape-block {
     display: flex;
     flex-direction: column;

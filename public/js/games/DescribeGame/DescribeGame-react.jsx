@@ -26,6 +26,13 @@ renderShape = (i, shape) => {
 REACT = (props) => {
     [ans, setAns] = React.useState("");
 
+    React.useEffect(() => {
+        if(props.gameState.input) {
+            console.log("Test");
+            setAns("");
+        }
+    }, [props.gameState.input])
+
     return (
         <React.Fragment>
             <div id="shape-container">
@@ -33,16 +40,16 @@ REACT = (props) => {
                     (() => {
                         if(props.gameState.input) {
                             return (<React.Fragment>
-                                { Array.from(Array(props.gameState._nShapes)).map((_, i) => renderShape(i, null)) }
+                                { props.gameState.win == 0 ? Array.from(Array(props.gameState._nShapes)).map((_, i) => renderShape(i, null)) : props.gameState._shapes?.map((shape, i) => renderShape(i, shape))}
                                 <input type="text" value={ans} onKeyUp={(e) => {
                                     if(e.key === 'Enter') {
                                         props.game.sendImmediateInput({answer: ans});
-                                        setAns("");
                                     }
                                 }}
                                 onInput={(e) => setAns(e.target.value)}
                                 placeholder={props.gameState.query}
-                                disabled={props.gameState.win != 0}/>
+                                disabled={props.gameState.win != 0}
+                                autoFocus/>
                                 { props.gameState.win == 1 ? <React.Fragment> &#9989; </React.Fragment> : null }
                                 { props.gameState.win == -1 ? <React.Fragment> &#10060; </React.Fragment> : null }
                             </React.Fragment>)
