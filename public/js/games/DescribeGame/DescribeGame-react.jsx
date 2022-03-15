@@ -23,16 +23,26 @@ renderShape = (i, shape) => {
     }
 }
 
+function renderOption(option) {
+    switch(option.type) {
+        case 'type': //Different from option.type. This is referring to the type of shape, for eg hexagon, circle etc
+            return (<div key="1" className="shape option-display" type={option.value} style={{backgroundColor: 'gray'}}></div>)
+        case 'text':
+            return <div className="option-display">{option.value}</div>
+        case 'color':
+            return <div className="option-display" style={{backgroundColor: option.value}}></div>
+    }
+}
+
+Option = (option) => {
+    return(
+        <div class="option">
+            {renderOption(option)}
+        </div>
+    );
+}
+
 REACT = (props) => {
-    [ans, setAns] = React.useState("");
-
-    React.useEffect(() => {
-        if(props.gameState.input) {
-            console.log("Test");
-            setAns("");
-        }
-    }, [props.gameState.input])
-
     return (
         <React.Fragment>
             <div id="shape-container">
@@ -41,15 +51,6 @@ REACT = (props) => {
                         if(props.gameState.input) {
                             return (<React.Fragment>
                                 { props.gameState.win == 0 ? Array.from(Array(props.gameState._nShapes)).map((_, i) => renderShape(i, null)) : props.gameState._shapes?.map((shape, i) => renderShape(i, shape))}
-                                <input type="text" value={ans} onKeyUp={(e) => {
-                                    if(e.key === 'Enter') {
-                                        props.game.sendImmediateInput({answer: ans});
-                                    }
-                                }}
-                                onInput={(e) => setAns(e.target.value)}
-                                placeholder={props.gameState.query}
-                                disabled={props.gameState.win != 0}
-                                autoFocus/>
                                 { props.gameState.win == 1 ? <React.Fragment> &#9989; </React.Fragment> : null }
                                 { props.gameState.win == -1 ? <React.Fragment> &#10060; </React.Fragment> : null }
                             </React.Fragment>)
@@ -59,6 +60,9 @@ REACT = (props) => {
                         }
                     })()
                 }
+            </div>
+            <div id="option-container">
+                    { props.gameState.input ? props.gameState.options?.map(option => <Option {...option}/>) : null }
             </div>
         </React.Fragment>
     )

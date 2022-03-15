@@ -29,37 +29,52 @@ renderShape = (i, shape) => {
   }
 };
 
+function renderOption(option) {
+  switch (option.type) {
+    case 'type':
+      //Different from option.type. This is referring to the type of shape, for eg hexagon, circle etc
+      return /*#__PURE__*/React.createElement("div", {
+        key: "1",
+        className: "shape option-display",
+        type: option.value,
+        style: {
+          backgroundColor: 'gray'
+        }
+      });
+
+    case 'text':
+      return /*#__PURE__*/React.createElement("div", {
+        className: "option-display"
+      }, option.value);
+
+    case 'color':
+      return /*#__PURE__*/React.createElement("div", {
+        className: "option-display",
+        style: {
+          backgroundColor: option.value
+        }
+      });
+  }
+}
+
+Option = option => {
+  return /*#__PURE__*/React.createElement("div", {
+    class: "option"
+  }, renderOption(option));
+};
+
 REACT = props => {
-  [ans, setAns] = React.useState("");
-  React.useEffect(() => {
-    if (props.gameState.input) {
-      console.log("Test");
-      setAns("");
-    }
-  }, [props.gameState.input]);
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     id: "shape-container"
   }, (() => {
     if (props.gameState.input) {
-      return /*#__PURE__*/React.createElement(React.Fragment, null, props.gameState.win == 0 ? Array.from(Array(props.gameState._nShapes)).map((_, i) => renderShape(i, null)) : props.gameState._shapes?.map((shape, i) => renderShape(i, shape)), /*#__PURE__*/React.createElement("input", {
-        type: "text",
-        value: ans,
-        onKeyUp: e => {
-          if (e.key === 'Enter') {
-            props.game.sendImmediateInput({
-              answer: ans
-            });
-          }
-        },
-        onInput: e => setAns(e.target.value),
-        placeholder: props.gameState.query,
-        disabled: props.gameState.win != 0,
-        autoFocus: true
-      }), props.gameState.win == 1 ? /*#__PURE__*/React.createElement(React.Fragment, null, " \u2705 ") : null, props.gameState.win == -1 ? /*#__PURE__*/React.createElement(React.Fragment, null, " \u274C ") : null);
+      return /*#__PURE__*/React.createElement(React.Fragment, null, props.gameState.win == 0 ? Array.from(Array(props.gameState._nShapes)).map((_, i) => renderShape(i, null)) : props.gameState._shapes?.map((shape, i) => renderShape(i, shape)), props.gameState.win == 1 ? /*#__PURE__*/React.createElement(React.Fragment, null, " \u2705 ") : null, props.gameState.win == -1 ? /*#__PURE__*/React.createElement(React.Fragment, null, " \u274C ") : null);
     } else {
       return props.gameState._shapes?.map((shape, i) => renderShape(i, shape));
     }
-  })()));
+  })()), /*#__PURE__*/React.createElement("div", {
+    id: "option-container"
+  }, props.gameState.input ? props.gameState.options?.map(option => /*#__PURE__*/React.createElement(Option, option)) : null));
 };
 
 ReactDOM.render( /*#__PURE__*/React.createElement(Canvas, {

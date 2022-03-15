@@ -1,6 +1,7 @@
 //This is the react file where we'll handle frontend stuff
 //This file will send the data to js/games/common/game.js using react,
 //which will then send the data to the server/games/common/game.js
+
 var game = null, canvas = null, Canvas = null;
 //create_game('HelloGame').then(res => {
     var socket = io.connect({query : `id=custom-id`});
@@ -17,43 +18,6 @@ var game = null, canvas = null, Canvas = null;
         link.href = `js/games/${details.name}/${details.name}.css`;
         link.media = 'all';
         head.appendChild(link);
-
-        Chatbox = (props) => {
-            [msg, setMsg] = React.useState("");
-
-            return (
-                <React.Fragment>
-                    <div id="chatbox">
-                        <div className="title">CHATBOX</div>
-                        <hr/>
-                        {
-                            Object.keys(props.chat).map((key) => (
-                                <React.Fragment key={key}>
-                                    <div className="chat-msg">
-                                        <div className="chat-content">{props.chat[key].content}</div>
-                                        <div className="chat-name">{props.chat[key].name}</div>
-                                    </div>
-                                </React.Fragment>
-                            ))
-                        }
-                        <input value={msg} type="text" onKeyUp={(e) => {if(e.key == 'Enter') { props.sendMsg(msg); setMsg(""); }}} onInput={(e) => setMsg(e.target.value)} className="form-control" id="chat" placeholder="Enter a message..."></input>
-                        <button onClick={() => { props.sendMsg(msg); setMsg(""); }} className="btn btn-primary" id="send">Send</button>
-                    </div>
-                </React.Fragment>
-            )
-        }
-
-        PlayerCard = (props) => {
-
-            return (
-                <React.Fragment>
-                    <div class="player-card">
-                        <div class="title">{props.playerName}</div>
-                        <div class="score">Score : {props.score}</div>
-                    </div>
-                </React.Fragment>
-            )
-        }
 
         Canvas = (props) => {
             [mouse, setMouse] = React.useState({x: 0, y: 0});
@@ -89,7 +53,7 @@ var game = null, canvas = null, Canvas = null;
                 //The div-canvas will be used for html elements
                 <React.Fragment>
                     <div id="players" className="border">
-                        <div class="title">PLAYERS</div>
+                        <div className="title">PLAYERS</div>
                         <hr/>
                         {
                             gameState.players?.map((_id, index) => (

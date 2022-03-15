@@ -2,11 +2,15 @@ const Game = require('./../common/game');
 const DescribeGamePlayer = require('./DescribeGamePlayer');
 
 const sleep = (ms) => { return new Promise((resolve) => { setTimeout(resolve, ms); }); }
+const getrand = (arr) => { return arr[Math.floor(Math.random()*arr.length)]; }
+
+//Taken from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+const shuffle = (array) => { let currentIndex = array.length,  randomIndex; while (currentIndex != 0) {    randomIndex = Math.floor(Math.random() * currentIndex);currentIndex--;[array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];} return array; }
 
 module.exports = class DescribeGame extends Game {
-    $shape_types = ['circle', 'triangle', 'hexagon', 'star'];
-    $shape_texts = ['A', 'B', 'C', 'D'];
-    $shape_colors = ['red', 'green', 'blue', 'yellow'];
+    $shape_type = ['circle', 'triangle', 'hexagon', 'star'];
+    $shape_text = ['A', 'B', 'C', 'D'];
+    $shape_color = ['red', 'green', 'blue', 'yellow'];
     $queries = ['type', 'text', 'color'];
     _nShapes = 3;
     _shapes = [];
@@ -33,20 +37,37 @@ module.exports = class DescribeGame extends Game {
         this.genNewShapes(4);
         this.sendStateToAllPlayers({win: 0});
         this.sendAllStates();
-        await sleep(4000);
+        await sleep(1000);
         //await sleep();
-        let query = this.$queries[Math.floor(Math.random()*3)];
+        let query = getrand(this.$queries);
         let queryid = Math.floor(Math.random()*this._shapes.length);
         this.$ans = this._shapes[queryid][query];
         console.log(this.$ans);
-        this.sendStateToAllPlayers({'input': true, 'query': `${query}, figure ${queryid+1}` });
+        this.sendStateToAllPlayers({input: true, query: `${query}, figure ${queryid+1}`, options: this.genOptions(query, this.$ans, 10)});
         this.$shapes = this._shapes;
         this._shapes = [];
-        await sleep(5000);
+        await sleep(1000);
         this.sendAllStates();
         this.sendStateToAllPlayers({input: false});
 
         this.perform();
+    }
+
+    //Generates n random options, one of which is the correct answer
+    genOptions(query, ans, n) {
+        let options = []
+        let genOption = () => {
+            let option = {}
+            option.type = getrand(this.$queries);
+            option.value = getrand(this['$shape_'+option.type]);
+            return option;
+        }
+        options[0] = {type: query, value: ans};
+        for(let i = 0; i < n-1; i++) {
+            options.push(genOption());
+        }
+
+        return options;
     }
 
     genNewShapes(n) {
@@ -54,9 +75,9 @@ module.exports = class DescribeGame extends Game {
         for(let i = 0; i < this._nShapes; i++) {
             this._shapes.push({
                 id: i,
-                type: this.$shape_types[Math.floor(Math.random()*this.$shape_types.length)],
-                color: this.$shape_colors[Math.floor(Math.random()*this.$shape_colors.length)],
-                text: this.$shape_texts[Math.floor(Math.random()*this.$shape_texts.length)]
+                type: this.$shape_type[Math.floor(Math.random()*this.$shape_type.length)],
+                color: this.$shape_color[Math.floor(Math.random()*this.$shape_color.length)],
+                text: this.$shape_text[Math.floor(Math.random()*this.$shape_text.length)]
             });
         }
     }

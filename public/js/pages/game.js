@@ -21,53 +21,6 @@ socket.on('details', async details => {
   link.media = 'all';
   head.appendChild(link);
 
-  Chatbox = props => {
-    [msg, setMsg] = React.useState("");
-    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-      id: "chatbox"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "title"
-    }, "CHATBOX"), /*#__PURE__*/React.createElement("hr", null), Object.keys(props.chat).map(key => /*#__PURE__*/React.createElement(React.Fragment, {
-      key: key
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "chat-msg"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "chat-content"
-    }, props.chat[key].content), /*#__PURE__*/React.createElement("div", {
-      className: "chat-name"
-    }, props.chat[key].name)))), /*#__PURE__*/React.createElement("input", {
-      value: msg,
-      type: "text",
-      onKeyUp: e => {
-        if (e.key == 'Enter') {
-          props.sendMsg(msg);
-          setMsg("");
-        }
-      },
-      onInput: e => setMsg(e.target.value),
-      className: "form-control",
-      id: "chat",
-      placeholder: "Enter a message..."
-    }), /*#__PURE__*/React.createElement("button", {
-      onClick: () => {
-        props.sendMsg(msg);
-        setMsg("");
-      },
-      className: "btn btn-primary",
-      id: "send"
-    }, "Send")));
-  };
-
-  PlayerCard = props => {
-    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-      class: "player-card"
-    }, /*#__PURE__*/React.createElement("div", {
-      class: "title"
-    }, props.playerName), /*#__PURE__*/React.createElement("div", {
-      class: "score"
-    }, "Score : ", props.score)));
-  };
-
   Canvas = props => {
     [mouse, setMouse] = React.useState({
       x: 0,
@@ -109,7 +62,7 @@ socket.on('details', async details => {
         id: "players",
         className: "border"
       }, /*#__PURE__*/React.createElement("div", {
-        class: "title"
+        className: "title"
       }, "PLAYERS"), /*#__PURE__*/React.createElement("hr", null), gameState.players?.map((_id, index) => /*#__PURE__*/React.createElement(PlayerCard, {
         playerName: _id,
         score: gameState.pdata[_id]?._score,
