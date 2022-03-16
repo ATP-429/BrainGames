@@ -36,13 +36,17 @@ function renderOption(option) {
 
 Option = (option) => {
     return(
-        <div class="option">
-            {renderOption(option)}
-        </div>
+        renderOption(option)
     );
 }
 
 REACT = (props) => {
+    [selected, setSelected] = React.useState(-1);
+
+    React.useEffect(() => {
+        if(props.gameState.win==0) setSelected(-1)
+    }, [props.gameState.win]);
+
     return (
         <React.Fragment>
             <div id="shape-container">
@@ -51,8 +55,6 @@ REACT = (props) => {
                         if(props.gameState.input) {
                             return (<React.Fragment>
                                 { props.gameState.win == 0 ? Array.from(Array(props.gameState._nShapes)).map((_, i) => renderShape(i, null)) : props.gameState._shapes?.map((shape, i) => renderShape(i, shape))}
-                                { props.gameState.win == 1 ? <React.Fragment> &#9989; </React.Fragment> : null }
-                                { props.gameState.win == -1 ? <React.Fragment> &#10060; </React.Fragment> : null }
                             </React.Fragment>)
                         }
                         else {
@@ -62,7 +64,14 @@ REACT = (props) => {
                 }
             </div>
             <div id="option-container">
-                    { props.gameState.input ? props.gameState.options?.map(option => <Option {...option}/>) : null }
+                    { props.gameState.input ? props.gameState.query : null}
+                    { props.gameState.input ? props.gameState.options?.map((option, i) => <React.Fragment>
+                        <div className="option" onClick={() => { if(props.gameState.input && props.gameState.win==0) {props.game.sendImmediateInput({answer: option.value}); setSelected(i);}}} style={{cursor: 'pointer'}}>
+                        <Option {...option}/>
+                        {i == props.gameState.answer_index && props.gameState.win != 0 ? <React.Fragment> &#9989; </React.Fragment> : null} {/*GREEN MARK FOR CORRECT ANSWER*/}
+                        {i == selected && i != props.gameState.answer_index && props.gameState.win != 0 ? <React.Fragment> 	&#10060; </React.Fragment> : null} {/*RED MARK FOR WRONG ANSWER*/}
+                        </div>
+                    </React.Fragment>) : null }
             </div>
         </React.Fragment>
     )

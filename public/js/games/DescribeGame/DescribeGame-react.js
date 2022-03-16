@@ -58,23 +58,38 @@ function renderOption(option) {
 }
 
 Option = option => {
-  return /*#__PURE__*/React.createElement("div", {
-    class: "option"
-  }, renderOption(option));
+  return renderOption(option);
 };
 
 REACT = props => {
+  [selected, setSelected] = React.useState(-1);
+  React.useEffect(() => {
+    if (props.gameState.win == 0) setSelected(-1);
+  }, [props.gameState.win]);
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     id: "shape-container"
   }, (() => {
     if (props.gameState.input) {
-      return /*#__PURE__*/React.createElement(React.Fragment, null, props.gameState.win == 0 ? Array.from(Array(props.gameState._nShapes)).map((_, i) => renderShape(i, null)) : props.gameState._shapes?.map((shape, i) => renderShape(i, shape)), props.gameState.win == 1 ? /*#__PURE__*/React.createElement(React.Fragment, null, " \u2705 ") : null, props.gameState.win == -1 ? /*#__PURE__*/React.createElement(React.Fragment, null, " \u274C ") : null);
+      return /*#__PURE__*/React.createElement(React.Fragment, null, props.gameState.win == 0 ? Array.from(Array(props.gameState._nShapes)).map((_, i) => renderShape(i, null)) : props.gameState._shapes?.map((shape, i) => renderShape(i, shape)));
     } else {
       return props.gameState._shapes?.map((shape, i) => renderShape(i, shape));
     }
   })()), /*#__PURE__*/React.createElement("div", {
     id: "option-container"
-  }, props.gameState.input ? props.gameState.options?.map(option => /*#__PURE__*/React.createElement(Option, option)) : null));
+  }, props.gameState.input ? props.gameState.query : null, props.gameState.input ? props.gameState.options?.map((option, i) => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "option",
+    onClick: () => {
+      if (props.gameState.input && props.gameState.win == 0) {
+        props.game.sendImmediateInput({
+          answer: option.value
+        });
+        setSelected(i);
+      }
+    },
+    style: {
+      cursor: 'pointer'
+    }
+  }, /*#__PURE__*/React.createElement(Option, option), i == props.gameState.answer_index && props.gameState.win != 0 ? /*#__PURE__*/React.createElement(React.Fragment, null, " \u2705 ") : null, " ", i == selected && i != props.gameState.answer_index && props.gameState.win != 0 ? /*#__PURE__*/React.createElement(React.Fragment, null, "  \u274C ") : null, " "))) : null));
 };
 
 ReactDOM.render( /*#__PURE__*/React.createElement(Canvas, {

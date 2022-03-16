@@ -33,24 +33,30 @@ module.exports = class DescribeGame extends Game {
 
     //Every step of the game will run here. This function calls itself at the end
     async perform() {
+        this.reset();
         await sleep(1000);
         this.genNewShapes(4);
         this.sendStateToAllPlayers({win: 0});
         this.sendAllStates();
-        await sleep(1000);
+        await sleep(5000);
         //await sleep();
         let query = getrand(this.$queries);
         let queryid = Math.floor(Math.random()*this._shapes.length);
         this.$ans = this._shapes[queryid][query];
         console.log(this.$ans);
-        this.sendStateToAllPlayers({input: true, query: `${query}, figure ${queryid+1}`, options: this.genOptions(query, this.$ans, 10)});
+        this.sendStateToAllPlayers({input: true, query: `${query}, figure ${queryid+1}`, options: this.genOptions(query, this.$ans, 5)});
         this.$shapes = this._shapes;
         this._shapes = [];
-        await sleep(1000);
+        await sleep(5000);
         this.sendAllStates();
         this.sendStateToAllPlayers({input: false});
 
         this.perform();
+    }
+
+    //resets all variables
+    reset() {
+        this.answer_index = -1; //GLOBAL public variable set to -1
     }
 
     //Generates n random options, one of which is the correct answer
@@ -66,7 +72,9 @@ module.exports = class DescribeGame extends Game {
         for(let i = 0; i < n-1; i++) {
             options.push(genOption());
         }
-
+        shuffle(options);
+        this.$answer_index = options.findIndex(element => element.type == query && element.value == ans); //Index at which real answer is put
+        console.log(this.$answer_index);
         return options;
     }
 
@@ -88,15 +96,14 @@ module.exports = class DescribeGame extends Game {
 
     input(player, data) {
         super.input(player, data);
+        console.log(data);
         if(data.answer != undefined) {
-            this.sendAllStates();
-            this.sendToPlayer(player, {_shapes: this.$shapes});
             if(data.answer.toUpperCase() === this.$ans.toUpperCase()) {
                 player._score++;
-                this.sendToPlayer(player, {win: 1});
+                this.sendToPlayer(player, {win: 1, answer_index: this.$answer_index, _shapes: this.$shapes});
             }
             else {
-                this.sendToPlayer(player, {win: -1});
+                this.sendToPlayer(player, {win: -1, answer_index: this.$answer_index, _shapes: this.$shapes});
             }
         }
     }

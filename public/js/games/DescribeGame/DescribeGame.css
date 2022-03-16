@@ -8,12 +8,10 @@
 .option-display {
     min-height: 20px;
     min-width: 80px;
-    max-width: 100px;
 }
 
 #option-container > * {
-    margin-top: 5px;
-    border: solid 1px;
+    margin-top: 20px;
 }
 
 #shape-container {
