@@ -6,7 +6,7 @@ var game = null,
     Canvas = null; //create_game('HelloGame').then(res => {
 
 var socket = io.connect({
-  query: `id=custom-id`
+  query: `id=${new URL(window.location.href).searchParams.get('id')}`
 });
 socket.on('msg', data => {
   console.log(data);

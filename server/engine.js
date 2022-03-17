@@ -54,6 +54,12 @@ module.exports =
         });
     },
 
+    get_games: async () => {
+        return gameEngine.get_games().then(list => {
+            return list;
+        })
+    },
+
     connect: async () => {
         try {
             await client.connect();

@@ -63,6 +63,11 @@ Option = option => {
 
 REACT = props => {
   [selected, setSelected] = React.useState(-1);
+  [answering, setAnswering] = React.useState(false); //Tells us if user needs to answer or not
+
+  React.useEffect(() => {
+    if (props.gameState.input) setAnswering(true);else setAnswering(false);
+  }, [props.gameState.input]);
   React.useEffect(() => {
     if (props.gameState.win == 0) setSelected(-1);
   }, [props.gameState.win]);
@@ -89,7 +94,14 @@ REACT = props => {
     style: {
       cursor: 'pointer'
     }
-  }, /*#__PURE__*/React.createElement(Option, option), i == props.gameState.answer_index && props.gameState.win != 0 ? /*#__PURE__*/React.createElement(React.Fragment, null, " \u2705 ") : null, " ", i == selected && i != props.gameState.answer_index && props.gameState.win != 0 ? /*#__PURE__*/React.createElement(React.Fragment, null, "  \u274C ") : null, " "))) : null));
+  }, /*#__PURE__*/React.createElement(Option, option), i == props.gameState.answer_index && props.gameState.win != 0 ? /*#__PURE__*/React.createElement(React.Fragment, null, " \u2705 ") : null, " ", i == selected && i != props.gameState.answer_index && props.gameState.win != 0 ? /*#__PURE__*/React.createElement(React.Fragment, null, "  \u274C ") : null, " "))) : null), /*#__PURE__*/React.createElement("div", {
+    id: "timer-container"
+  }, props.gameState.input ? /*#__PURE__*/React.createElement(Timer, {
+    time: props.gameState._answerTime,
+    width: props.game.details.canvasWidth,
+    height: "30",
+    color: "rgb(129, 189, 151)"
+  }) : null));
 };
 
 ReactDOM.render( /*#__PURE__*/React.createElement(Canvas, {

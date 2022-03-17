@@ -10,10 +10,9 @@ module.exports = {
         let fail = () => {res['success'] = 0};
         let detail = (str) => {res['detail'] = str};
 
-        await engine.connect(); //CONNECT TO DB
-
         switch(req['request_type']) {
             case 'login':
+                await engine.connect(); //CONNECT TO DB
                 await engine.login(req['username'], req['password']).then((user) => {
                     if(user !== null) {
                         success();
@@ -27,6 +26,7 @@ module.exports = {
                 break;
 
             case 'register':
+                await engine.connect(); //CONNECT TO DB
                 await engine.register(req['username'], req['email'], req['password']).then((status) => {
                     if(status['acknowledged']) {
                         success();
@@ -47,6 +47,13 @@ module.exports = {
                         detail("Game not created");
                     }
                 });
+                break;
+
+            case 'get_games':
+                await engine.get_games().then((list) => {
+                    res.list = list;
+                    success();
+                })
                 break;
 
             case 'poll':

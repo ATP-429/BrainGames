@@ -9,6 +9,7 @@ functions = [
     ['login', 'username', 'password'],
     ['register', 'username', 'email', 'password'],
     ['create_game', 'name'],
+    ['get_games'],
     ['poll']
 ]
 

@@ -1,5 +1,23 @@
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+Timer = props => {
+  [time, setTime] = React.useState(props.time);
+  React.useEffect(() => {
+    let interval = setInterval(() => {
+      setTime(time - 1000);
+    }, 1000);
+    return () => clearInterval(interval); //This function will run after component dismounts https://dev.to/robmarshall/how-to-use-componentwillunmount-with-functional-components-in-react-2a5g
+  }, []);
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: props.height + "px",
+      width: props.width * time / props.time + "px",
+      border: "solid 1px",
+      backgroundColor: props.color
+    }
+  });
+};
+
 Input = props => {
   var {
     setMsg,

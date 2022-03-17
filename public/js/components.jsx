@@ -1,3 +1,16 @@
+Timer = (props) => {
+    [time, setTime] = React.useState(props.time);
+
+    React.useEffect(() => {
+        let interval = setInterval(() => {setTime(time-1000)}, 1000);
+        return () => clearInterval(interval); //This function will run after component dismounts https://dev.to/robmarshall/how-to-use-componentwillunmount-with-functional-components-in-react-2a5g
+    }, []);
+
+    return (
+        <div style={{height: props.height+"px", width: props.width * time/props.time+"px", border: "solid 1px", backgroundColor: props.color}}/>
+    )
+}
+
 Input = (props) => {
     var {setMsg, onEnter, ...otherprops} = props;
     return (

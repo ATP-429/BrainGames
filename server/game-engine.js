@@ -35,8 +35,12 @@ module.exports = class GameEngine {
 
     //Create a game given the game name and return its id
     async create_game(name) {
-        let id = 'custom-id';//uuidv4();
+        let id = uuidv4();
         currentGames[id] = eval(`new ${name}()`);
         return id;
+    }
+
+    async get_games() {
+        return Object.keys(currentGames);
     }
 }

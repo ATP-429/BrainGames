@@ -42,6 +42,12 @@ Option = (option) => {
 
 REACT = (props) => {
     [selected, setSelected] = React.useState(-1);
+    [answering, setAnswering] = React.useState(false); //Tells us if user needs to answer or not
+
+    React.useEffect(() => {
+        if(props.gameState.input) setAnswering(true);
+        else setAnswering(false);
+    }, [props.gameState.input]);
 
     React.useEffect(() => {
         if(props.gameState.win==0) setSelected(-1)
@@ -72,6 +78,9 @@ REACT = (props) => {
                         {i == selected && i != props.gameState.answer_index && props.gameState.win != 0 ? <React.Fragment> 	&#10060; </React.Fragment> : null} {/*RED MARK FOR WRONG ANSWER*/}
                         </div>
                     </React.Fragment>) : null }
+            </div>
+            <div id="timer-container">
+                { props.gameState.input ? <Timer time={props.gameState._answerTime} width={props.game.details.canvasWidth} height='30' color="rgb(129, 189, 151)"/> : null}
             </div>
         </React.Fragment>
     )

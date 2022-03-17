@@ -14,6 +14,9 @@ module.exports = class DescribeGame extends Game {
     $queries = ['type', 'text', 'color'];
     _nShapes = 3;
     _shapes = [];
+    _answerTime = 5000; //Time which user gets to answer
+    _visibleTime = 5000; //Time for which shapes are visible
+    _intervalTime = 1000; //Time between two rounds
 
     constructor() {
         super({
@@ -34,11 +37,11 @@ module.exports = class DescribeGame extends Game {
     //Every step of the game will run here. This function calls itself at the end
     async perform() {
         this.reset();
-        await sleep(1000);
+        await sleep(this._intervalTime);
         this.genNewShapes(4);
         this.sendStateToAllPlayers({win: 0});
         this.sendAllStates();
-        await sleep(5000);
+        await sleep(this._visibleTime);
         //await sleep();
         let query = getrand(this.$queries);
         let queryid = Math.floor(Math.random()*this._shapes.length);
@@ -47,7 +50,7 @@ module.exports = class DescribeGame extends Game {
         this.sendStateToAllPlayers({input: true, query: `${query}, figure ${queryid+1}`, options: this.genOptions(query, this.$ans, 5)});
         this.$shapes = this._shapes;
         this._shapes = [];
-        await sleep(5000);
+        await sleep(this._answerTime);
         this.sendAllStates();
         this.sendStateToAllPlayers({input: false});
 
@@ -70,7 +73,11 @@ module.exports = class DescribeGame extends Game {
         }
         options[0] = {type: query, value: ans};
         for(let i = 0; i < n-1; i++) {
-            options.push(genOption());
+            let option = genOption();
+            if(options.findIndex(element => element.type == option.type && element.value == option.value) == -1)
+                options.push(option);
+            else
+                i--;
         }
         shuffle(options);
         this.$answer_index = options.findIndex(element => element.type == query && element.value == ans); //Index at which real answer is put
