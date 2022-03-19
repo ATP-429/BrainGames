@@ -36,7 +36,7 @@ module.exports = {
                 break;
 
             case 'create_game':
-                await engine.create_game(req.name).then((id) => {
+                await engine.create_game(req.name, req.details).then((id) => {
                     if(id != null) {
                         success();
                         res.id = id;

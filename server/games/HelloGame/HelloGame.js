@@ -2,7 +2,7 @@ const Game = require('./../common/game');
 const HelloGamePlayer = require('./HelloGamePlayer');
 
 module.exports = class HelloGame extends Game {
-    constructor() {
+    constructor(details) {
         super({
             name: 'HelloGame',
             rawRender: true,
@@ -15,7 +15,8 @@ module.exports = class HelloGame extends Game {
             rawClientUpdates: true,
             clientUpdatesPerSec: 60,
             rawServerUpdates: true,
-            serverUpdatesPerSec: 60
+            serverUpdatesPerSec: 60,
+            ...details
         });
     }
 

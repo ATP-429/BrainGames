@@ -45,8 +45,8 @@ module.exports =
         });
     },
 
-    create_game: async (name) => {
-        return gameEngine.create_game(name).then(id => {
+    create_game: async (name, details) => {
+        return gameEngine.create_game(name, details).then(id => {
             if(id == null)
                 return null;
             else

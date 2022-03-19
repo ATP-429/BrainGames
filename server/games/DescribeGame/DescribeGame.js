@@ -18,7 +18,7 @@ module.exports = class DescribeGame extends Game {
     _visibleTime = 5000; //Time for which shapes are visible
     _intervalTime = 1000; //Time between two rounds
 
-    constructor() {
+    constructor(details) {
         super({
             name: 'DescribeGame',
             rawRender: false,
@@ -28,6 +28,7 @@ module.exports = class DescribeGame extends Game {
             canvasHeight: 600,
 
             rawClientUpdates: false,
+            ...details
         });
 
 
@@ -46,7 +47,6 @@ module.exports = class DescribeGame extends Game {
         let query = getrand(this.$queries);
         let queryid = Math.floor(Math.random()*this._shapes.length);
         this.$ans = this._shapes[queryid][query];
-        console.log(this.$ans);
         this.sendStateToAllPlayers({input: true, query: `${query}, figure ${queryid+1}`, options: this.genOptions(query, this.$ans, 5)});
         this.$shapes = this._shapes;
         this._shapes = [];
@@ -81,7 +81,6 @@ module.exports = class DescribeGame extends Game {
         }
         shuffle(options);
         this.$answer_index = options.findIndex(element => element.type == query && element.value == ans); //Index at which real answer is put
-        console.log(this.$answer_index);
         return options;
     }
 
@@ -103,13 +102,13 @@ module.exports = class DescribeGame extends Game {
 
     input(player, data) {
         super.input(player, data);
-        console.log(data);
         if(data.answer != undefined) {
             if(data.answer.toUpperCase() === this.$ans.toUpperCase()) {
                 player._score++;
                 this.sendToPlayer(player, {win: 1, answer_index: this.$answer_index, _shapes: this.$shapes});
             }
             else {
+                player._score--;
                 this.sendToPlayer(player, {win: -1, answer_index: this.$answer_index, _shapes: this.$shapes});
             }
         }

@@ -12,6 +12,7 @@ const HelloGame = require('./games/HelloGame/HelloGame');
 const DescribeGame = require('./games/DescribeGame/DescribeGame');
 
 var currentGames = {}
+var privateGames = {}
 
 module.exports = class GameEngine {
     constructor(io) {
@@ -30,17 +31,27 @@ module.exports = class GameEngine {
             }
         })
 
-        this.create_game('DescribeGame');
+        this.create_game('DescribeGame', {lobbyName: 'Server Lobby - 01'});
+        this.create_game('HelloGame', {lobbyName: 'Server Lobby - 02'});
+        this.create_game('HelloGame', {lobbyName: 'Server Lobby - 03'});
     }
 
     //Create a game given the game name and return its id
-    async create_game(name) {
+    async create_game(name, details) {
         let id = uuidv4();
-        currentGames[id] = eval(`new ${name}()`);
+        if(details?.private)
+            privateGames[id] = eval(`new ${name}(details)`);
+        else
+            currentGames[id] = eval(`new ${name}(details)`);
         return id;
     }
 
     async get_games() {
-        return Object.keys(currentGames);
+        let lst = []
+        for(const [id, game] of Object.entries(currentGames)) {
+            lst.push({...game.getDetails(), id: id});
+        }
+
+        return lst;
     }
 }

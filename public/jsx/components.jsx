@@ -12,14 +12,24 @@ Timer = (props) => {
 }
 
 Input = (props) => {
-    var {setMsg, onEnter, ...otherprops} = props;
+    var {value, setValue, onEnter, ...otherprops} = props;
     return (
         <input type="text"
-            value={msg}
-            onInput={(e) => setMsg(e.target.value)}
-            onKeyUp={(e) => {if(e.key == 'Enter') { onEnter(); setMsg(""); }}}
+            value={value}
+            onInput={(e) => setValue(e.target.value)}
+            onKeyUp={(e) => {if(e.key == 'Enter') { onEnter(); }}}
             {...otherprops}/>
         )
+}
+
+Dropdown = (props) => {
+    var {placeholder, value, setValue, options, ...otherprops} = props;
+    return (
+        <select value={value} onChange={e => setValue(e.target.value)} {...otherprops}>
+            <option value="" selected disabled hidden>{placeholder}</option>
+            {options.map(option => <option value={option}>{option}</option>)}
+        </select>
+    )
 }
 
 PlayerCard = (props) => {
@@ -52,7 +62,7 @@ Chatbox = (props) => {
                     ))
                 }
 
-                <Input setMsg={setMsg} onEnter={() => props.sendMsg(msg)} className="form-control" id="chat" placeholder="Enter a message..." />
+                <Input setValue={setMsg} value={msg} onEnter={() => {props.sendMsg(msg); setMsg("") }} className="form-control" id="chat" placeholder="Enter a message..." />
                 <button onClick={() => { props.sendMsg(msg); setMsg(""); }} className="btn btn-primary" id="send">Send</button>
             </div>
         </React.Fragment>

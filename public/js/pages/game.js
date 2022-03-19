@@ -3,13 +3,18 @@
 //which will then send the data to the server/games/common/game.js
 var game = null,
     canvas = null,
-    Canvas = null; //create_game('HelloGame').then(res => {
-
+    Canvas = null;
 var socket = io.connect({
   query: `id=${new URL(window.location.href).searchParams.get('id')}`
 });
 socket.on('msg', data => {
   console.log(data);
+
+  if (data === 'Game not found') {
+    let element = document.createElement('div');
+    element.innerHTML = `<h1>GAME NOT FOUND!</h1><br><h3>Make sure you entered the correct id!</h3>`;
+    document.getElementById('game-page').append(element);
+  }
 });
 socket.on('details', async details => {
   await fetch(`/js/games/${details.name}/${details.name}-base.js`).then(file => file.text()).then(text => eval.call(window, text));
@@ -130,4 +135,4 @@ socket.on('details', async details => {
   };
 
   await fetch(`/js/games/${details.name}/${details.name}-react.js`).then(file => file.text()).then(text => eval.call(window, text));
-}); //});
+});

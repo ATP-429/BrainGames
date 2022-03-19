@@ -20,21 +20,42 @@ Timer = props => {
 
 Input = props => {
   var {
-    setMsg,
+    value,
+    setValue,
     onEnter,
     ...otherprops
   } = props;
   return /*#__PURE__*/React.createElement("input", _extends({
     type: "text",
-    value: msg,
-    onInput: e => setMsg(e.target.value),
+    value: value,
+    onInput: e => setValue(e.target.value),
     onKeyUp: e => {
       if (e.key == 'Enter') {
         onEnter();
-        setMsg("");
       }
     }
   }, otherprops));
+};
+
+Dropdown = props => {
+  var {
+    placeholder,
+    value,
+    setValue,
+    options,
+    ...otherprops
+  } = props;
+  return /*#__PURE__*/React.createElement("select", _extends({
+    value: value,
+    onChange: e => setValue(e.target.value)
+  }, otherprops), /*#__PURE__*/React.createElement("option", {
+    value: "",
+    selected: true,
+    disabled: true,
+    hidden: true
+  }, placeholder), options.map(option => /*#__PURE__*/React.createElement("option", {
+    value: option
+  }, option)));
 };
 
 PlayerCard = props => {
@@ -62,8 +83,12 @@ Chatbox = props => {
   }, props.chat[key].content), /*#__PURE__*/React.createElement("div", {
     className: "chat-name"
   }, props.chat[key].name)))), /*#__PURE__*/React.createElement(Input, {
-    setMsg: setMsg,
-    onEnter: () => props.sendMsg(msg),
+    setValue: setMsg,
+    value: msg,
+    onEnter: () => {
+      props.sendMsg(msg);
+      setMsg("");
+    },
     className: "form-control",
     id: "chat",
     placeholder: "Enter a message..."
