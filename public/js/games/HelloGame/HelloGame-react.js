@@ -8,13 +8,13 @@ REACT = props => {
     }),
     className: "btn btn-success",
     id: "add-btn"
-  }, "Click Me!"), /*#__PURE__*/React.createElement("button", {
+  }, "Add one!"), /*#__PURE__*/React.createElement("button", {
     onClick: () => game.sendImmediateInput({
       sub: true
     }),
     className: "btn btn-danger",
     id: "sub-btn"
-  }, "DON'T CLICK!")));
+  }, "Subtract one!")));
 };
 
 ReactDOM.render( /*#__PURE__*/React.createElement(Canvas, {

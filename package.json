@@ -5,6 +5,8 @@
   "main": "server/server.js",
   "dependencies": {
     "@babel/preset-react": "^7.16.7",
+    "babel-cli": "^6.26.0",
+    "babel-preset-react-app": "^3.1.2",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.17.2",
@@ -16,7 +18,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/server.js"
+    "start": "nodemon server/server.js",
+    "auto-compile": "npx babel --watch public/jsx --out-dir public/js",
+    "dev": "npm run start & npm run auto-compile"
   },
   "repository": {
     "type": "git",
@@ -31,5 +35,9 @@
   "homepage": "https://github.com/ATP-429/BrainGames#readme",
   "engines": {
     "node": "14.x"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.7"
   }
 }

@@ -3,8 +3,8 @@ REACT = (props) => {
     return (
         <React.Fragment>
             <div id="btn-container">
-                <button onClick={() => game.sendImmediateInput({add: true})} className="btn btn-success" id="add-btn">Click Me!</button>
-                <button onClick={() => game.sendImmediateInput({sub: true})} className="btn btn-danger" id="sub-btn">DON'T CLICK!</button>
+                <button onClick={() => game.sendImmediateInput({add: true})} className="btn btn-success" id="add-btn">Add one!</button>
+                <button onClick={() => game.sendImmediateInput({sub: true})} className="btn btn-danger" id="sub-btn">Subtract one!</button>
             </div>
         </React.Fragment>
     )
