@@ -19,6 +19,7 @@ module.exports = class GameEngine {
         this.io = io;
         this.io.on('connection', (socket) => {
             let game = currentGames[socket.handshake.query.id];
+            if(game == undefined) game = privateGames[socket.handshake.query.id];
             if(game != undefined) {
                 socket.emit('msg', `Connected to game ${socket.handshake.query.id}`);
                 socket.emit('details', game.getDetails());
@@ -39,7 +40,8 @@ module.exports = class GameEngine {
     //Create a game given the game name and return its id
     async create_game(name, details) {
         let id = uuidv4();
-        if(details?.private)
+        details.id = id;
+        if(details?.visibility?.toLowerCase() === 'private')
             privateGames[id] = eval(`new ${name}(details)`);
         else
             currentGames[id] = eval(`new ${name}(details)`);
@@ -49,7 +51,7 @@ module.exports = class GameEngine {
     async get_games() {
         let lst = []
         for(const [id, game] of Object.entries(currentGames)) {
-            lst.push({...game.getDetails(), id: id});
+            lst.push({...game.getDetails()});
         }
 
         return lst;

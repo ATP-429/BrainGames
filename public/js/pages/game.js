@@ -33,12 +33,19 @@ socket.on('details', async details => {
     });
     [keys, setKeys] = React.useState({});
     [gameState, setGameState] = React.useState({});
+    [shareTxt, setShareTxt] = React.useState('GET LINK');
 
     getInput = () => {
       return {
         mouse: mouse,
         key: keys
       };
+    };
+
+    share = () => {
+      navigator.clipboard.writeText(window.location.href);
+      setShareTxt('Copied to clipboard!');
+      setTimeout(() => setShareTxt('GET LINK'), 3000);
     }; //We only want one instance of game object to be created, so we need to useEffect, which will only create a new instance if the second parameter undergoes a change
     //Since we're passing an empty array as the second parameter, a new game object will never be created.
     //So, the code will only run once, after this component has been rendered
@@ -130,7 +137,16 @@ socket.on('details', async details => {
       }))), /*#__PURE__*/React.createElement(Chatbox, {
         chat: gameState.chat ? gameState.chat : {},
         sendMsg: () => game.sendMessage(msg)
-      }))
+      }), /*#__PURE__*/React.createElement("div", {
+        id: "share-container"
+      }, /*#__PURE__*/React.createElement("div", null, " ", /*#__PURE__*/React.createElement("button", {
+        className: "btn btn-primary",
+        onClick: share
+      }, shareTxt), " "), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement("div", {
+        style: {
+          textAlign: 'center'
+        }
+      }, /*#__PURE__*/React.createElement("h2", null, "OR")), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement("h5", null, "Game ID:"), " ", details.id, " ", /*#__PURE__*/React.createElement("br", null), "Share ID with your friend")))
     );
   };
 

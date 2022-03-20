@@ -1,17 +1,24 @@
-const createLobby = (name, lobbyName) => {
-    create_game(name, {lobbyName: lobbyName});
-}
-
 GameList = () => {
     [list, setList] = React.useState([]);
     [pull, setPull] = React.useState(true);
     [id, setId] = React.useState('');
     [game, setGame] = React.useState('');
     [lobby, setLobby] = React.useState('');
+    [visibility, setVisibility] = React.useState('');
+    [btnTxt, setBtnTxt] = React.useState('Create lobby');
 
     refresh = () => {
         get_games().then((data) => {setList(data.list)});
         setTimeout(() => setPull(!pull), 1000); //refresh again in 1s by changing pull variable
+    }
+
+    createLobby = (name, details) => {
+        create_game(name, details).then(res => {
+            if(res.success) {
+                setBtnTxt('Lobby created! Redirecting...');
+                setTimeout(() => (window.location.href=`/game.html?id=${res.id}`), 1000)
+            }
+        });
     }
 
     React.useEffect(() => {refresh()}, [pull]); //Calls refresh if 'pull' variable is changed.
@@ -64,10 +71,14 @@ GameList = () => {
                     <Dropdown id="gametype" placeholder="Select a game" options={['HelloGame', 'DescribeGame']} value={game} setValue={setGame} />
                 </div>
                 <div className="form-group">
+                    <label htmlFor="gamevisibility">Game :&nbsp;</label>
+                    <Dropdown id="gamevisibility" placeholder="Select visibility" options={['Public', 'Private']} value={visibility} setValue={setVisibility} />
+                </div>
+                <div className="form-group">
                     <label htmlFor="lobbyname">Lobby name :&nbsp;</label>
                     <Input id="lobbyname" placeholder="Enter lobby name..." value={lobby} setValue={setLobby} />
                 </div>
-                <button className="btn btn-success" onClick={() => createLobby(game, lobby)}>Create lobby</button>
+                <button className="btn btn-success" onClick={() => createLobby(game, {lobbyName: lobby, visibility: visibility})}>{btnTxt}</button>
             </div>
         </React.Fragment>
     )

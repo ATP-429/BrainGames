@@ -27,10 +27,17 @@ socket.on('details', async (details) => {
         [mouse, setMouse] = React.useState({x: 0, y: 0});
         [keys, setKeys] = React.useState({});
         [gameState, setGameState] = React.useState({});
+        [shareTxt, setShareTxt] = React.useState('GET LINK')
 
 
         getInput = () => {
             return {mouse: mouse, key: keys};
+        }
+
+        share = () => {
+            navigator.clipboard.writeText(window.location.href);
+            setShareTxt('Copied to clipboard!');
+            setTimeout(() => setShareTxt('GET LINK'), 3000);
         }
 
         //We only want one instance of game object to be created, so we need to useEffect, which will only create a new instance if the second parameter undergoes a change
@@ -97,6 +104,16 @@ socket.on('details', async (details) => {
                     </div>
                 </div>
                 <Chatbox chat={gameState.chat ? gameState.chat : {}} sendMsg={() => game.sendMessage(msg)}/>
+                <div id="share-container">
+                    <div> <button className="btn btn-primary" onClick={share}>{shareTxt}</button> </div>
+                    <div>
+                        <hr/>
+                        <div style={{textAlign:'center'}}><h2>OR</h2></div><br/>
+                        <hr/>
+                        <h5>Game ID:</h5> {details.id} <br/>
+                        Share ID with your friend
+                    </div>
+                </div>
             </React.Fragment>
         )
     };

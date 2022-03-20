@@ -28,6 +28,15 @@
     padding: 10px;
 }
 
+#share-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 10%;
+    overflow-wrap: break-word;
+    margin-left: 5px;
+}
+
 .title {
     text-align: center;
 }
@@ -55,10 +64,6 @@
     margin-bottom: 15px;
     text-align: right;
     right: 2px;
-}
-
-.chat-msg {
-
 }
 
 #chatbox #send {

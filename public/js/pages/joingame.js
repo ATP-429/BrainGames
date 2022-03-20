@@ -1,21 +1,26 @@
-const createLobby = (name, lobbyName) => {
-  create_game(name, {
-    lobbyName: lobbyName
-  });
-};
-
 GameList = () => {
   [list, setList] = React.useState([]);
   [pull, setPull] = React.useState(true);
   [id, setId] = React.useState('');
   [game, setGame] = React.useState('');
   [lobby, setLobby] = React.useState('');
+  [visibility, setVisibility] = React.useState('');
+  [btnTxt, setBtnTxt] = React.useState('Create lobby');
 
   refresh = () => {
     get_games().then(data => {
       setList(data.list);
     });
     setTimeout(() => setPull(!pull), 1000); //refresh again in 1s by changing pull variable
+  };
+
+  createLobby = (name, details) => {
+    create_game(name, details).then(res => {
+      if (res.success) {
+        setBtnTxt('Lobby created! Redirecting...');
+        setTimeout(() => window.location.href = `/game.html?id=${res.id}`, 1000);
+      }
+    });
   };
 
   React.useEffect(() => {
@@ -78,6 +83,16 @@ GameList = () => {
   })), /*#__PURE__*/React.createElement("div", {
     className: "form-group"
   }, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "gamevisibility"
+  }, "Game :\xA0"), /*#__PURE__*/React.createElement(Dropdown, {
+    id: "gamevisibility",
+    placeholder: "Select visibility",
+    options: ['Public', 'Private'],
+    value: visibility,
+    setValue: setVisibility
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "form-group"
+  }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "lobbyname"
   }, "Lobby name :\xA0"), /*#__PURE__*/React.createElement(Input, {
     id: "lobbyname",
@@ -86,8 +101,11 @@ GameList = () => {
     setValue: setLobby
   })), /*#__PURE__*/React.createElement("button", {
     className: "btn btn-success",
-    onClick: () => createLobby(game, lobby)
-  }, "Create lobby")));
+    onClick: () => createLobby(game, {
+      lobbyName: lobby,
+      visibility: visibility
+    })
+  }, btnTxt)));
 };
 
 ReactDOM.render( /*#__PURE__*/React.createElement(GameList, null), document.getElementById('page'));
