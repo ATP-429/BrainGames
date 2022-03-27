@@ -6,6 +6,7 @@ GameList = () => {
     [lobby, setLobby] = React.useState('');
     [visibility, setVisibility] = React.useState('');
     [btnTxt, setBtnTxt] = React.useState('Create lobby');
+    [gamesList, setGamesList] = React.useState([]);
 
     refresh = () => {
         get_games().then((data) => {setList(data.list)});
@@ -22,6 +23,8 @@ GameList = () => {
     }
 
     React.useEffect(() => {refresh()}, [pull]); //Calls refresh if 'pull' variable is changed.
+
+    React.useEffect(() => get_games_list().then(data => setGamesList(data.list)), []    );
 
     return (
         <React.Fragment>
@@ -68,7 +71,7 @@ GameList = () => {
                 <hr/>
                 <div className="form-group">
                     <label htmlFor="gametype">Game :&nbsp;</label>
-                    <Dropdown id="gametype" placeholder="Select a game" options={['HelloGame', 'DescribeGame']} value={game} setValue={setGame} />
+                    <Dropdown id="gametype" placeholder="Select a game" options={gamesList} value={game} setValue={setGame} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="gamevisibility">Game :&nbsp;</label>

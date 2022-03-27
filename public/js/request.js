@@ -3,7 +3,13 @@
  * The following fields will give the parameter names
  */
 AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
-functions = [['login', 'username', 'password'], ['register', 'username', 'email', 'password'], ['create_game', 'name', 'details'], ['get_games'], ['poll']];
+functions = [
+  ['login', 'username', 'password'], 
+  ['register', 'username', 'email', 'password'], 
+  ['create_game', 'name', 'details'], 
+  ['get_games'], 
+  ['get_games_list'],
+  ['poll']];
 
 for (fn of functions) {
   fn_str = `

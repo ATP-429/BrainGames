@@ -8,11 +8,12 @@ const responder = require('./responder')
 const socketIO = require('socket.io');
 const { v4 : uuidv4 } = require('uuid');
 const Game = require('./games/common/game');
-const HelloGame = require('./games/HelloGame/HelloGame');
-const DescribeGame = require('./games/DescribeGame/DescribeGame');
+const fs = require('fs');
 
-var currentGames = {}
-var privateGames = {}
+var currentGames = {};
+var privateGames = {};
+
+var gamesList = [];
 
 module.exports = class GameEngine {
     constructor(io) {
@@ -32,19 +33,25 @@ module.exports = class GameEngine {
             }
         })
 
+        let data = fs.readFileSync('server/games_list.txt').toString('utf-8').split('\n');
+        for(let game of data) {
+            eval(`global.${game} = require('./games/${game}/${game}')`);
+            gamesList.push(game);
+        }
+
         this.create_game('DescribeGame', {lobbyName: 'Server Lobby - 01'});
         this.create_game('HelloGame', {lobbyName: 'Server Lobby - 02'});
-        this.create_game('HelloGame', {lobbyName: 'Server Lobby - 03'});
+        this.create_game('MathGame', {lobbyName: 'Server Lobby - 03'});
     }
 
     //Create a game given the game name and return its id
     async create_game(name, details) {
-        let id = uuidv4();
+        let id = 'my-game'; //uuidv4();
         details.id = id;
         if(details?.visibility?.toLowerCase() === 'private')
-            privateGames[id] = eval(`new ${name}(details)`);
+            privateGames[id] = eval(`new global.${name}(details)`);
         else
-            currentGames[id] = eval(`new ${name}(details)`);
+            currentGames[id] = eval(`new global.${name}(details)`);
         return id;
     }
 
@@ -55,5 +62,9 @@ module.exports = class GameEngine {
         }
 
         return lst;
+    }
+
+    async get_games_list() {
+        return gamesList;
     }
 }

@@ -19,7 +19,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/server.js",
-    "auto-compile": "npx babel --watch public/jsx --out-dir public/js",
+    "auto-compile": "npx babel --watch public/jsx --out-dir public/js --presets @babel/preset-react",
     "dev": "npm run start & npm run auto-compile"
   },
   "repository": {

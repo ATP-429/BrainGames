@@ -6,6 +6,7 @@ GameList = () => {
   [lobby, setLobby] = React.useState('');
   [visibility, setVisibility] = React.useState('');
   [btnTxt, setBtnTxt] = React.useState('Create lobby');
+  [gamesList, setGamesList] = React.useState([]);
 
   refresh = () => {
     get_games().then(data => {
@@ -27,6 +28,7 @@ GameList = () => {
     refresh();
   }, [pull]); //Calls refresh if 'pull' variable is changed.
 
+  React.useEffect(() => get_games_list().then(data => setGamesList(data.list)), []);
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("table", {
     id: "games-table",
     className: "table border border-dark games-table"
@@ -77,7 +79,7 @@ GameList = () => {
   }, "Game :\xA0"), /*#__PURE__*/React.createElement(Dropdown, {
     id: "gametype",
     placeholder: "Select a game",
-    options: ['HelloGame', 'DescribeGame'],
+    options: gamesList,
     value: game,
     setValue: setGame
   })), /*#__PURE__*/React.createElement("div", {

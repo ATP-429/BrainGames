@@ -56,6 +56,13 @@ module.exports = {
                 })
                 break;
 
+            case 'get_games_list':
+                await engine.get_games_list().then((list) => {
+                    res.list = list;
+                    success();
+                })
+                break;
+                
             case 'poll':
                 success();
                 detail("Loud and clear");

@@ -35,14 +35,14 @@ module.exports = class Game {
     }
 
     //Send the environment variables (Public variables of this game object)
-    sendGlobalState() {
+    async sendGlobalState() {
         for(let player of this.$players) {
             player.emit('state', this.getPublicVars())
         }
     }
 
     //Send ALL of the variables that the client has access to
-    sendAllStates() {
+    async sendAllStates() {
         for(let player of this.$players) {
             let pdata = {};
             for(let p of this.$players) {
@@ -53,24 +53,24 @@ module.exports = class Game {
     }
 
     //Send only the players' variables to themselves
-    sendAllPlayerStates() {
+    async sendAllPlayerStates() {
         for(let player of this.$players) {
             player.emit('state', {pdata: {[player.$id]: player.getPlayerVars()}});
         }
     }
 
     //Send specific update to specific player
-    sendToPlayer(player, state) {
+    async sendToPlayer(player, state) {
         player.emit('state', state);
     }
 
-    sendStateToAllPlayers(state) {
+    async sendStateToAllPlayers(state) {
         for(let player of this.$players) {
             player.emit('state', state);
         }
     }
 
-    sendAllStatesToPlayer(player) {
+    async sendAllStatesToPlayer(player) {
         let pdata = {};
         for(let p of this.$players) {
             pdata[p.$id] = p.getGlobalVars();
@@ -79,13 +79,13 @@ module.exports = class Game {
     }
 
     //Send players ids to all players
-    sendPlayersList() {
+    async sendPlayersList() {
         for(let player of this.$players) {
             player.emit('players', this.$players.map(x => x.$id))
         }
     }
 
-    addPlayer(socket) {
+    async addPlayer(socket) {
         let player = this.createPlayer(socket);
         socket.on('input', (data, callback) => {
             this.input(player, data);
@@ -102,27 +102,29 @@ module.exports = class Game {
     }
 
     //Override this method if you want to do other things while creating player
-    createPlayer(socket) {
+    async createPlayer(socket) {
         return new Player(socket);
     }
 
-    removePlayer(socket) {
+    async removePlayer(socket) {
         let index = this.$players.findIndex(player => player.$socket === socket);
         let player = this.$players[index];
         this.$players.splice(index, 1); //Remove player from the players array
         this.onPlayerRemove(player);
     }
 
-    onPlayerJoin(player) {
-        this.sendPlayersList();
-        this.sendAllStates();
+    async onPlayerJoin(player) {
+        await this.sendPlayersList();
+        await this.sendAllStates();
+        //NOTE: SEND PLAYER'S ID TO THEM AS '$me' VARIABLE
+        this.sendToPlayer(player, {$me: player.$id});
     }
 
-    onPlayerRemove(player) {
+    async onPlayerRemove(player) {
         this.sendPlayersList();
     }
 
-    input(player, data) {
+    async input(player, data) {
         //console.log(`Received input ${data} from player ${player.id}`);
         // try {
         //     if(data.mouse.click)
