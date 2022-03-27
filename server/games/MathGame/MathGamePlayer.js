@@ -9,13 +9,23 @@ module.exports = class MathGamePlayer extends Player {
 
     _score = 0;
     _picked = [];
+    _grabbed = [];
+    _inventory = [];
 
     constructor(socket) {
         super(socket);
+        this._canPick = true;
     }
 
     reset() {
-        _picked = [];
+        this._picked = [];
+        let newInventory = [];
+        for(let tile of this._inventory) {
+            if(!tile.change) {
+                newInventory.push(tile);
+            }
+        }
+        this._inventory = newInventory;
     }
 
     eval() {

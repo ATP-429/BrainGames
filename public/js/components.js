@@ -1,14 +1,18 @@
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 Timer = props => {
-  [time, setTime] = React.useState(props.time);
+  //Jesus fucking christ idk why exactly. But not making this 'const' was causing some huge problems with 'time' being shared with 
+  //other <Time/> components. Also at the bottom, we had to do time => time-1000 instead of just time-1000 for some reason, again idk
+  // why exactly. But it's finally working. Now I can make multiple <Time /> components on the same page and none of them affect each other
+  const [time, setTime] = React.useState(props.time);
   React.useEffect(() => {
     let interval = setInterval(() => {
-      setTime(time - 1000);
+      setTime(time => time - 1000);
     }, 1000);
     return () => clearInterval(interval); //This function will run after component dismounts https://dev.to/robmarshall/how-to-use-componentwillunmount-with-functional-components-in-react-2a5g
   }, []);
   return /*#__PURE__*/React.createElement("div", {
+    id: props.id,
     style: {
       height: props.height + "px",
       width: props.width * time / props.time + "px",
@@ -69,7 +73,7 @@ PlayerCard = props => {
 };
 
 Chatbox = props => {
-  [msg, setMsg] = React.useState('');
+  const [msg, setMsg] = React.useState('');
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     id: "chatbox"
   }, /*#__PURE__*/React.createElement("div", {

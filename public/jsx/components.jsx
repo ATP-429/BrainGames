@@ -1,13 +1,17 @@
 Timer = (props) => {
-    [time, setTime] = React.useState(props.time);
+     //Jesus fucking christ idk why exactly. But not making this 'const' was causing some huge problems with 'time' being shared with 
+     //other <Time/> components. Also at the bottom, we had to do time => time-1000 instead of just time-1000 for some reason, again idk
+     // why exactly. But it's finally working. Now I can make multiple <Time /> components on the same page and none of them affect each other
+    const [time, setTime] = React.useState(props.time);
 
     React.useEffect(() => {
-        let interval = setInterval(() => {setTime(time-1000)}, 1000);
+        let interval = setInterval(() => {setTime(time => time-1000)}, 1000);
         return () => clearInterval(interval); //This function will run after component dismounts https://dev.to/robmarshall/how-to-use-componentwillunmount-with-functional-components-in-react-2a5g
     }, []);
 
+
     return (
-        <div style={{height: props.height+"px", width: props.width * time/props.time+"px", border: "solid 1px", backgroundColor: props.color}}/>
+        <div id={props.id} style={{height: props.height+"px", width: props.width * time/props.time+"px", border: "solid 1px", backgroundColor: props.color}}/>
     )
 }
 
@@ -44,7 +48,7 @@ PlayerCard = (props) => {
 }
 
 Chatbox = (props) => {
-    [msg, setMsg] = React.useState('');
+    const [msg, setMsg] = React.useState('');
 
     return (
         <React.Fragment>
