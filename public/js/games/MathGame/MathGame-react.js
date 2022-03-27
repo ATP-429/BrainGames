@@ -69,7 +69,7 @@ REACT = props => {
   }) : null), /*#__PURE__*/React.createElement("div", {
     key: "3",
     id: "inv-container"
-  }, console.log(props.gameState.pdata?.[props.gameState.$me]?._inventory), /*#__PURE__*/React.createElement(GRID, {
+  }, /*#__PURE__*/React.createElement(GRID, {
     $me: props.gameState.$me,
     onPick: (i, j) => onPut(i, j),
     width: 1,

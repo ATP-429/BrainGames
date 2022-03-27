@@ -13,7 +13,7 @@ module.exports = class MathGame extends Game {
     _answerTime = 5000;
 
     $randomization = 0.3; //Probability of a tile being changed after every round
-    $grabability = 0.2; //Probability of tile being able to be grabbed
+    $grabability = 0.1; //Probability of tile being able to be grabbed
 
     constructor(details) {
         super({

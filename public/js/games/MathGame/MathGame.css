@@ -29,7 +29,8 @@
 }
 
 .tile[status="disabled"] {
-    background-color: black !important;
+    visibility: hidden;
+    /*background-color: white !important;*/
 }
 
 .tile[status="wrong"] {

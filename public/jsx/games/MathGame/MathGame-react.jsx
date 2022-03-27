@@ -52,7 +52,6 @@ REACT = (props) => {
                 { props.gameState.input ? <Timer id="test1" key="5" time={props.gameState._answerTime} width={props.game.details.canvasWidth} height='30' color="rgb(129, 189, 151)"/> : null}
             </div>
             <div key="3" id="inv-container">
-                {console.log(props.gameState.pdata?.[props.gameState.$me]?._inventory)}
                 <GRID $me={props.gameState.$me} onPick={(i, j) => onPut(i, j)} width={1} height={props.gameState._maxInvSize} arr={[props.gameState.pdata?.[props.gameState.$me]?._inventory]}/>
             </div>
             <div key="4" id="answer-container">

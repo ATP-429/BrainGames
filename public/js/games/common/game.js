@@ -81,9 +81,11 @@ var Game = class {
     //deeply update nested objects. https://stackoverflow.com/questions/46545026/a-better-way-to-deep-update-an-object-in-es6-with-lodash-or-any-other-library
     //NOTE: Using mergeWith and providing a custom function, we make it so that arrays are NOT merged.
     //For eg, if this.state = {a: [3, 7]} and newState = {a: [3, 2]}, this.state will become {a: [3, 2]} NOT {a: [3, 7, 2]}
+    //this.state = _.mergeWith(this.state, newState);
+    // console.log(this.state);
     this.state = _.mergeWith(this.state, newState, (objValue, srcValue, key, object, source, stack) => {
-      if (Object.prototype.toString.call(newState[key]) === '[object Array]') {
-        return newState[key]; //If object we are merging is an array, just add it to this.state directly, no merging
+      if (Object.prototype.toString.call(srcValue) === '[object Array]') {
+        return srcValue; //If object we are merging is an array, just add it to this.state directly, no merging
       }
     }); //basically, the same thing as below but for all potential nested objects, not just pdata
     //this.state = {...this.state, ...newState, pdata: {...this.state.pdata, ...newState.pdata}}; //Update state variables, if any changes
