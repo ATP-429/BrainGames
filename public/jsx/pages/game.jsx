@@ -27,8 +27,8 @@ socket.on('details', async (details) => {
         [mouse, setMouse] = React.useState({x: 0, y: 0});
         [keys, setKeys] = React.useState({});
         [gameState, setGameState] = React.useState({});
-        [shareTxt, setShareTxt] = React.useState('GET LINK')
-
+        [shareTxt, setShareTxt] = React.useState('GET LINK');
+        [msg, setMsg] = React.useState("");
 
         getInput = () => {
             return {mouse: mouse, key: keys};
@@ -68,7 +68,7 @@ socket.on('details', async (details) => {
                     <hr/>
                     {
                         gameState.players?.map((_id, index) => (
-                            <PlayerCard playerName={_id} score={gameState.pdata[_id]?._score}key={index}/>
+                            <PlayerCard id={_id} name={_id} url={gameState.pdata[_id]?.profileURL} score={gameState.pdata[_id]?._score} key={index}/>
                         ))
                     }
                 </div>
@@ -103,7 +103,7 @@ socket.on('details', async (details) => {
                         </canvas>
                     </div>
                 </div>
-                <Chatbox chat={gameState.chat ? gameState.chat : {}} sendMsg={() => game.sendMessage(msg)}/>
+                <Chatbox chat={gameState.chat ? gameState.chat : {}} value={msg} setValue = {(msg) => setMsg(msg)} sendMsg={() => game.sendMessage(msg)}/>
                 <div id="share-container">
                     <div> <button className="btn btn-primary" onClick={share}>{shareTxt}</button> </div>
                     <div>

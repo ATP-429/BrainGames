@@ -1,6 +1,7 @@
 'use strict'
 
 const { v4 : uuidv4 } = require('uuid');
+const cookie = require('cookie');
 
 module.exports = class Player {
     /* $ : Variables starting with $ are private. They'll never be shared with anyone. They only exist on the server
@@ -14,8 +15,9 @@ module.exports = class Player {
     $id;
 
     constructor(socket) {
+        let playerCookie = cookie.parse(socket.handshake.headers.cookie);
         this.$socket = socket;
-        this.$id = uuidv4();
+        this.$id = playerCookie.userID;
     }
 
     emit(eventName, obj) {

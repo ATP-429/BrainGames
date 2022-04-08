@@ -5,7 +5,6 @@ const {ObjectId} = require('mongodb');
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const uri = require('./mongodburi');
-
 const client = new MongoClient(uri);
 
 var log = (data) => {
@@ -20,6 +19,12 @@ module.exports =
         return client.db('braingames').collection('user_cred').insertOne({username: username, email: email, password: hash});
     },
 
+    get_details: async (userID) => {
+        return client.db('braingames').collection('user_cred').findOne({_id: ObjectId(userID)}).then((user) => {
+            return user;
+        });
+    },
+
     //Returns user array if login was successful, null otherwise
     login: async (username, password) => {
         return client.db('braingames').collection('user_cred').findOne({username: username}).then((user) => {
@@ -32,8 +37,9 @@ module.exports =
                 return client.db('braingames').collection('user_cred').findOne({email: username}).then((user) => {
                     if(user === null) //If user is still null, neither username nor email is in db
                         return null;
-                    if(auth(user, password)) //If auth is successfull
+                    if(auth(user, password)) { //If auth is successfull
                         return user;
+                    }
                     else
                         return null;
                 });

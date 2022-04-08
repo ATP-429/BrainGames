@@ -37,18 +37,31 @@ Dropdown = (props) => {
 }
 
 PlayerCard = (props) => {
+    [profileURL, setProfileURL] = React.useState('/res/images/avatar.png');
+    [username, setUsername] = React.useState('');
+    React.useEffect(() => {
+        get_details(props.id).then(res => {
+            setUsername(res.details.username);
+            if(res.details.profileURL != undefined)
+                setProfileURL(res.details.setProfileURL);
+        })
+    }, [])
+
     return (
         <React.Fragment>
             <div className="player-card">
-                <div className="title">{props.playerName}</div>
-                <div className="score">Score : {props.score}</div>
+                <img className="profile-pic" src={profileURL}></img>
+                <div className="profile-content">
+                    <div className="title">{username}</div>
+                    <div className="score">Score : {props.score}</div>
+                </div>
             </div>
         </React.Fragment>
     )
 }
 
 Chatbox = (props) => {
-    const [msg, setMsg] = React.useState('');
+    var {value, setValue} = props;
 
     return (
         <React.Fragment>
@@ -66,8 +79,8 @@ Chatbox = (props) => {
                     ))
                 }
 
-                <Input setValue={setMsg} value={msg} onEnter={() => {props.sendMsg(msg); setMsg("") }} className="form-control" id="chat" placeholder="Enter a message..." />
-                <button onClick={() => { props.sendMsg(msg); setMsg(""); }} className="btn btn-primary" id="send">Send</button>
+                <Input setValue={setValue} value={value} onEnter={() => {props.sendMsg(value); setValue("") }} className="form-control" id="chat" placeholder="Enter a message..." />
+                <button onClick={() => { props.sendMsg(msg); setValue(""); }} className="btn btn-primary" id="send">Send</button>
             </div>
         </React.Fragment>
     )

@@ -1,3 +1,5 @@
+/* USER PAGE */
+
 /* JOIN GAME PAGE */
 #create-game-panel {
     padding: 20px;
@@ -19,7 +21,6 @@
 }
 
 /* GAME PAGE */
-
 #game-page {
     display: flex;
     width: 100vw;
@@ -42,12 +43,23 @@
 }
 
 .player-card {
-    margin-left: 5px;
+    display: flex;
+    margin-left: 5px;   
     margin-top: 5px;
     margin-right: 5px;
     padding: 5px;
     border: solid 1px;
 }
+.profile-pic {
+    display: block;
+    max-width: 64px;
+    max-height: 64px;
+}
+.profile-content {
+    float: right;
+    margin-left: 10px;
+}
+
 
 /* chat messages */
 .chat-content {

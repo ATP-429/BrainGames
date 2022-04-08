@@ -63,17 +63,33 @@ Dropdown = props => {
 };
 
 PlayerCard = props => {
+  [profileURL, setProfileURL] = React.useState('/res/images/avatar.png');
+  [username, setUsername] = React.useState('');
+  React.useEffect(() => {
+    get_details(props.id).then(res => {
+      setUsername(res.details.username);
+      if (res.details.profileURL != undefined) setProfileURL(res.details.setProfileURL);
+    });
+  }, []);
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "player-card"
+  }, /*#__PURE__*/React.createElement("img", {
+    className: "profile-pic",
+    src: profileURL
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "profile-content"
   }, /*#__PURE__*/React.createElement("div", {
     className: "title"
-  }, props.playerName), /*#__PURE__*/React.createElement("div", {
+  }, username), /*#__PURE__*/React.createElement("div", {
     className: "score"
-  }, "Score : ", props.score)));
+  }, "Score : ", props.score))));
 };
 
 Chatbox = props => {
-  const [msg, setMsg] = React.useState('');
+  var {
+    value,
+    setValue
+  } = props;
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     id: "chatbox"
   }, /*#__PURE__*/React.createElement("div", {
@@ -87,11 +103,11 @@ Chatbox = props => {
   }, props.chat[key].content), /*#__PURE__*/React.createElement("div", {
     className: "chat-name"
   }, props.chat[key].name)))), /*#__PURE__*/React.createElement(Input, {
-    setValue: setMsg,
-    value: msg,
+    setValue: setValue,
+    value: value,
     onEnter: () => {
-      props.sendMsg(msg);
-      setMsg("");
+      props.sendMsg(value);
+      setValue("");
     },
     className: "form-control",
     id: "chat",
@@ -99,7 +115,7 @@ Chatbox = props => {
   }), /*#__PURE__*/React.createElement("button", {
     onClick: () => {
       props.sendMsg(msg);
-      setMsg("");
+      setValue("");
     },
     className: "btn btn-primary",
     id: "send"

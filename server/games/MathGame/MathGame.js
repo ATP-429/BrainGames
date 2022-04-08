@@ -79,7 +79,6 @@ module.exports = class MathGame extends Game {
     async checkAnswer(player) {
         if(player._picked.length == 3) {
             if(this.isOperator(player._picked[1].text)) {
-                console.log(player.eval());
                 if(player.eval()==this._ans) {
                     player._score++;
                     await this.sendToPlayer(player, {win: true});
@@ -104,14 +103,10 @@ module.exports = class MathGame extends Game {
 
     async input(player, data) {
         if(data.put && player._picked.length < 3) {
-            console.log(data);
-            console.log(player._inventory);
             player._picked.push(player._inventory[data.i]);
 
             this.checkAnswer(player);
             this.sendAllStates();
-
-            console.log(player._inventory[data.i]);
         }
         else if(data.pick) {
             if(this._grid[data.i][data.j].grabbable && this._grid[data.i][data.j].status != "disabled") {

@@ -1,5 +1,6 @@
 'use strict'
 
+const session = require('express-session');
 const engine = require('./engine');
 
 module.exports = {
@@ -15,6 +16,7 @@ module.exports = {
                 await engine.connect(); //CONNECT TO DB
                 await engine.login(req['username'], req['password']).then((user) => {
                     if(user !== null) {
+                        actualResponse.cookie('userID', user._id.toString());
                         success();
                         detail("Logged in successfully!");
                     }
@@ -24,6 +26,10 @@ module.exports = {
                     }
                 });
                 break;
+            
+            case 'logout':
+                actualResponse.clearCookie('userID');
+                break;
 
             case 'register':
                 await engine.connect(); //CONNECT TO DB
@@ -32,6 +38,17 @@ module.exports = {
                         success();
                         detail("Registered successfully");
                     }
+                });
+                break;
+
+            case 'get_details':
+                await engine.connect();
+                await engine.get_details(req['id']).then((user) => {
+                    if(user != null)
+                        user.password = null;
+                    res.details = user;
+                    success();
+                    detail("User details returned successfully");
                 });
                 break;
 

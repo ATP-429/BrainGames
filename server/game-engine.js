@@ -46,7 +46,7 @@ module.exports = class GameEngine {
 
     //Create a game given the game name and return its id
     async create_game(name, details) {
-        let id = 'my-game'; //uuidv4();
+        let id = uuidv4();
         details.id = id;
         if(details?.visibility?.toLowerCase() === 'private')
             privateGames[id] = eval(`new global.${name}(details)`);

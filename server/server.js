@@ -11,6 +11,8 @@ const cors = require('cors');
 const { v4 : uuidv4 } = require('uuid');
 const GameEngine = require('./game-engine');
 const multer = require('multer');
+const session = require('express-session');
+const cookieParser = require("cookie-parser");
 
 const port = 3000;
 const storage = multer.diskStorage({
@@ -39,6 +41,15 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
 app.use(cors());
+
+// const oneDay = 1000 * 60 * 60 * 24;
+// app.use(session({
+//     secret: "secretkeyfornowpublicinsrccode",
+//     saveUninitialized:true,
+//     cookie: { maxAge: oneDay },
+//     resave: false 
+// }));
+// app.use(cookieParser());
 
 app.post('/request', responder.responder); //respond is a function defined in responder.js
 app.post('/upload', (req, res) => {

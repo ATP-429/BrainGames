@@ -34,6 +34,7 @@ socket.on('details', async details => {
     [keys, setKeys] = React.useState({});
     [gameState, setGameState] = React.useState({});
     [shareTxt, setShareTxt] = React.useState('GET LINK');
+    [msg, setMsg] = React.useState("");
 
     getInput = () => {
       return {
@@ -76,7 +77,9 @@ socket.on('details', async details => {
       }, /*#__PURE__*/React.createElement("div", {
         className: "title"
       }, "PLAYERS"), /*#__PURE__*/React.createElement("hr", null), gameState.players?.map((_id, index) => /*#__PURE__*/React.createElement(PlayerCard, {
-        playerName: _id,
+        id: _id,
+        name: _id,
+        url: gameState.pdata[_id]?.profileURL,
         score: gameState.pdata[_id]?._score,
         key: index
       }))), /*#__PURE__*/React.createElement("div", {
@@ -136,6 +139,8 @@ socket.on('details', async details => {
         className: "border"
       }))), /*#__PURE__*/React.createElement(Chatbox, {
         chat: gameState.chat ? gameState.chat : {},
+        value: msg,
+        setValue: msg => setMsg(msg),
         sendMsg: () => game.sendMessage(msg)
       }), /*#__PURE__*/React.createElement("div", {
         id: "share-container"

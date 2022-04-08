@@ -19,8 +19,17 @@ const LoginForm = () => {
     [username, setUsername] = React.useState('');
     [password, setPassword] = React.useState('');
 
+    React.useEffect(() => {
+        let cookies = getCookies();
+        if(cookies.userID != undefined) {
+            console.log("Already logged in");
+            window.location.href = "/";
+        }
+    }, [])
+
     loginSuccess = () => {
         setState('success');
+        window.location.href = "/";
     }
 
     loginFail = () => {
@@ -30,8 +39,10 @@ const LoginForm = () => {
     tryLogin = async () => {
         setState('logging');
         login(username, password).then((res) => {
-            if(res['success'])
+            if(res['success']) {
+                console.log(document.cookie);
                 loginSuccess();
+            }
             else
                 loginFail();
         })
