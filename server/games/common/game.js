@@ -3,6 +3,7 @@
 'use strict'
 
 const Player = require('./player');
+const axios = require('axios');
 
 module.exports = class Game {
     //rawInput: Sends every user input at every 1/60th of a second, that is,
@@ -121,7 +122,13 @@ module.exports = class Game {
     }
 
     async onPlayerRemove(player) {
+        this.registerScore(player);
         this.sendPlayersList();
+    }
+
+    registerScore(player) {
+        let values = {request_type: "register_score", data: {player_id: player.$id, game_name: this.$details.name, score: player._score}};
+        axios.post('http://localhost:3000/request', values);
     }
 
     async input(player, data) {

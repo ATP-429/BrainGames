@@ -5,6 +5,7 @@
   "main": "server/server.js",
   "dependencies": {
     "@babel/preset-react": "^7.16.7",
+    "axios": "^0.26.1",
     "babel-cli": "^6.26.0",
     "babel-preset-react-app": "^3.1.2",
     "bcryptjs": "^2.4.3",
@@ -15,6 +16,7 @@
     "mongodb": "^4.3.1",
     "multer": "^1.4.4",
     "nodemon": "^2.0.15",
+    "request": "^2.88.2",
     "socket.io": "^4.4.1",
     "uuid": "^8.3.2"
   },

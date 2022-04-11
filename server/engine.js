@@ -13,6 +13,10 @@ var log = (data) => {
 
 module.exports =
 {
+    register_score: async(data) => {
+        console.log("Test");
+        return client.db('braingames').collection('stats').insertOne({player_id: data.player_id, score: data.score});
+    },
     register: async (username, email, password) => {
         var salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(password, salt);

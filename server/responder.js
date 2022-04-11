@@ -10,8 +10,12 @@ module.exports = {
         let success = () => {res['success'] = 1};
         let fail = () => {res['success'] = 0};
         let detail = (str) => {res['detail'] = str};
-
         switch(req['request_type']) {
+            case 'register_score':
+                await engine.connect(); //CONNECT TO DB
+                await engine.register_score(req.data);
+
+                break;
             case 'login':
                 await engine.connect(); //CONNECT TO DB
                 await engine.login(req['username'], req['password']).then((user) => {

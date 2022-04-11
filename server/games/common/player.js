@@ -18,6 +18,13 @@ module.exports = class Player {
         let playerCookie = cookie.parse(socket.handshake.headers.cookie);
         this.$socket = socket;
         this.$id = playerCookie.userID;
+        if(this.$id == null) {
+            this.init_guest();
+        }
+    }
+
+    init_guest() {
+        this.$id = uuidv4();
     }
 
     emit(eventName, obj) {
