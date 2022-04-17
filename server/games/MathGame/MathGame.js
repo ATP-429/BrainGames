@@ -89,6 +89,7 @@ module.exports = class MathGame extends Game {
                     }
                 }
                 else {
+                    player._score--;
                     for(let tile of player._picked) {
                         tile.status='wrong';
                         tile.occupied=null;

@@ -94,7 +94,7 @@ module.exports = class Game {
         });
 
         socket.on('chat', data => {
-            this.sendStateToAllPlayers({chat: {[this.$chats_count]: {name: player.$id, content: data}}});
+            this.sendStateToAllPlayers({chat: {[this.$chats_count]: {id: player.$id, content: data}}});
             this.$chats_count++;
         });
 

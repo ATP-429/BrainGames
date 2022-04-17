@@ -62,13 +62,89 @@ Dropdown = props => {
   }, option)));
 };
 
-PlayerCard = props => {
-  [profileURL, setProfileURL] = React.useState('/res/images/avatar.png');
-  [username, setUsername] = React.useState('');
+Navigator = props => {
+  const [username, setUsername] = React.useState('');
+  const [profileURL, setProfileURL] = React.useState('');
+  const [logged, setLogged] = React.useState('');
+  React.useEffect(() => {
+    //Gets id from cookie, func defined in request.js
+    get_details(getSelfID()).then(res => {
+      if (res.details?.username != undefined) {
+        setUsername(res.details.username);
+        setLogged(true);
+      } else setUsername('Guest');
+
+      if (res.details?.profileURL != undefined) setProfileURL(res.details.setProfileURL);else setProfileURL('/res/images/avatar.png');
+    });
+  }, []);
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("nav", {
+    className: "navigator navbar navbar-expand-lg navbar-dark bg-dark"
+  }, /*#__PURE__*/React.createElement("a", {
+    href: logged ? "/profile.html?id=" + getSelfID() : "/login.html",
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, /*#__PURE__*/React.createElement("img", {
+    src: profileURL,
+    className: "profile-pic"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "text-white"
+  }, username)), logged ? /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-outline-success my-2 my-sm-0",
+    onClick: () => {
+      logout().then(() => location.reload());
+    }
+  }, "LOGOUT") : /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-outline-success my-2 my-sm-0",
+    onClick: () => window.location.href = "/login.html"
+  }, "LOGIN"), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-outline-success my-2 my-sm-0",
+    onClick: () => window.location.href = "/joingame.html"
+  }, "PLAY"), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-outline-success my-2 my-sm-0",
+    onClick: () => window.location.href = "/index.html"
+  }, "HOMEPAGE")));
+};
+
+PlayerInfo = props => {
+  const [profileURL, setProfileURL] = React.useState('');
+  const [username, setUsername] = React.useState('');
+  const [gameDetails, setGameDetails] = React.useState([]);
   React.useEffect(() => {
     get_details(props.id).then(res => {
-      setUsername(res.details.username);
-      if (res.details.profileURL != undefined) setProfileURL(res.details.setProfileURL);
+      if (res.details?.username != undefined) setUsername(res.details.username);else setUsername('Guest');
+      if (res.details?.profileURL != undefined) setProfileURL(res.details.setProfileURL);else setProfileURL('/res/images/avatar.png');
+    });
+  }, [props.id]);
+  React.useEffect(() => {// get_game_details(props.id).then(data => {
+    //     setGameDetails(data.details);
+    // });
+  }, [props.id]);
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "player-card",
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "left"
+    }
+  }, /*#__PURE__*/React.createElement("img", {
+    className: "profile-pic",
+    src: profileURL
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "profile-content"
+  }, /*#__PURE__*/React.createElement("div", null, username), gameDetails.map((details, i) => "Game" + i))));
+};
+
+PlayerCard = props => {
+  const [profileURL, setProfileURL] = React.useState('');
+  const [username, setUsername] = React.useState('');
+  React.useEffect(() => {
+    get_details(props.id).then(res => {
+      if (res.details?.username != undefined) setUsername(res.details.username);else setUsername('Guest');
+      if (res.details?.profileURL != undefined) setProfileURL(res.details.setProfileURL);else setProfileURL('/res/images/avatar.png');
     });
   }, []);
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
@@ -96,13 +172,10 @@ Chatbox = props => {
     className: "title"
   }, "CHATBOX"), /*#__PURE__*/React.createElement("hr", null), Object.keys(props.chat).map(key => /*#__PURE__*/React.createElement(React.Fragment, {
     key: key
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "chat-msg"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "chat-content"
-  }, props.chat[key].content), /*#__PURE__*/React.createElement("div", {
-    className: "chat-name"
-  }, props.chat[key].name)))), /*#__PURE__*/React.createElement(Input, {
+  }, /*#__PURE__*/React.createElement(ChatMsg, {
+    id: props.chat[key].id,
+    content: props.chat[key].content
+  }))), /*#__PURE__*/React.createElement(Input, {
     setValue: setValue,
     value: value,
     onEnter: () => {
@@ -120,4 +193,27 @@ Chatbox = props => {
     className: "btn btn-primary",
     id: "send"
   }, "Send")));
+};
+
+ChatMsg = props => {
+  const [profileURL, setProfileURL] = React.useState('');
+  const [username, setUsername] = React.useState('');
+  React.useEffect(() => {
+    get_details(props.id).then(res => {
+      if (res.details?.username != undefined) setUsername(res.details.username);else setUsername('Guest');
+      if (res.details?.profileURL != undefined) setProfileURL(res.details.setProfileURL);else setProfileURL('/res/images/avatar.png');
+    });
+  }, []);
+  return /*#__PURE__*/React.createElement("div", {
+    className: "chat-msg"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "chat-content"
+  }, props.content), /*#__PURE__*/React.createElement("div", {
+    class: "chat-details"
+  }, /*#__PURE__*/React.createElement("img", {
+    src: profileURL,
+    className: "chat-pic"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "chat-name"
+  }, username)));
 };

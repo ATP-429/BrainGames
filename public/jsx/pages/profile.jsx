@@ -1,16 +1,17 @@
 Profile = () => {
-    [playerDetails, setPlayerDetails] = React.useState({
-
-    });
+    const [ID, setID] = React.useState('');
 
     React.useEffect(() => {
-        get_details(new URL(window.location.href).searchParams.get('id')).then(details => {
-            
-        })
+        let id = new URL(window.location.href).searchParams.get('id');
+        console.log(id);
+        setID(id);
     }, []);
 
     return (
-        <PlayerCard props={playerDetails}></PlayerCard>
+        <React.Fragment>
+            <Navigator />
+            <PlayerInfo id={ID} />
+        </React.Fragment>
     )
 }
 

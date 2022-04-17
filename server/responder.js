@@ -2,6 +2,7 @@
 
 const session = require('express-session');
 const engine = require('./engine');
+engine.connect();
 
 module.exports = {
     responder: async (actualRequest, actualResponse) => {
@@ -12,12 +13,10 @@ module.exports = {
         let detail = (str) => {res['detail'] = str};
         switch(req['request_type']) {
             case 'register_score':
-                await engine.connect(); //CONNECT TO DB
                 await engine.register_score(req.data);
 
                 break;
             case 'login':
-                await engine.connect(); //CONNECT TO DB
                 await engine.login(req['username'], req['password']).then((user) => {
                     if(user !== null) {
                         actualResponse.cookie('userID', user._id.toString());
@@ -36,7 +35,6 @@ module.exports = {
                 break;
 
             case 'register':
-                await engine.connect(); //CONNECT TO DB
                 await engine.register(req['username'], req['email'], req['password']).then((status) => {
                     if(status['acknowledged']) {
                         success();
@@ -46,7 +44,6 @@ module.exports = {
                 break;
 
             case 'get_details':
-                await engine.connect();
                 await engine.get_details(req['id']).then((user) => {
                     if(user != null)
                         user.password = null;
@@ -93,8 +90,6 @@ module.exports = {
                 fail();
                 detail("Unkown request");
         }
-
-        engine.disconnect(); //DISCONNECT FROM DB
 
         actualResponse.end(JSON.stringify(res));
     },

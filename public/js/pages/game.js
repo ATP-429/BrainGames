@@ -84,10 +84,7 @@ socket.on('details', async details => {
         key: index
       }))), /*#__PURE__*/React.createElement("div", {
         id: "game-content"
-      }, /*#__PURE__*/React.createElement("img", {
-        src: "https://i.imgur.com/mOaTPx8.png",
-        id: "logo"
-      }), /*#__PURE__*/React.createElement("div", {
+      }, /*#__PURE__*/React.createElement("div", {
         id: "container"
       }, /*#__PURE__*/React.createElement("div", {
         id: "div-canvas",
@@ -157,3 +154,4 @@ socket.on('details', async details => {
 
   await fetch(`/js/games/${details.name}/${details.name}-react.js`).then(file => file.text()).then(text => eval.call(window, text));
 });
+ReactDOM.render( /*#__PURE__*/React.createElement(Navigator, null), document.getElementById('nav'));

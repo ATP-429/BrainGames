@@ -40,7 +40,7 @@ module.exports = class GameEngine {
         }
 
         this.create_game('DescribeGame', {lobbyName: 'Server Lobby - 01'});
-        this.create_game('HelloGame', {lobbyName: 'Server Lobby - 02'});
+        this.create_game('MathGame', {lobbyName: 'Server Lobby - 02'});
         this.create_game('MathGame', {lobbyName: 'Server Lobby - 03'});
     }
 

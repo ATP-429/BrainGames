@@ -29,7 +29,7 @@ GameList = () => {
   }, [pull]); //Calls refresh if 'pull' variable is changed.
 
   React.useEffect(() => get_games_list().then(data => setGamesList(data.list)), []);
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("table", {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Navigator, null), /*#__PURE__*/React.createElement("table", {
     id: "games-table",
     className: "table border border-dark games-table"
   }, /*#__PURE__*/React.createElement("thead", {

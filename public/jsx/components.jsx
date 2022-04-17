@@ -36,17 +36,96 @@ Dropdown = (props) => {
     )
 }
 
-PlayerCard = (props) => {
-    [profileURL, setProfileURL] = React.useState('/res/images/avatar.png');
-    [username, setUsername] = React.useState('');
+Navigator = (props) => {
+    const [username, setUsername] = React.useState('');
+    const [profileURL, setProfileURL] = React.useState('');
+    const [logged, setLogged] = React.useState('');
+
     React.useEffect(() => {
-        get_details(props.id).then(res => {
-            setUsername(res.details.username);
-            if(res.details.profileURL != undefined)
+        //Gets id from cookie, func defined in request.js
+        get_details(getSelfID()).then(res => {
+            if(res.details?.username != undefined) {
+                setUsername(res.details.username);
+                setLogged(true);
+            }
+            else
+                setUsername('Guest');
+            if(res.details?.profileURL != undefined)
                 setProfileURL(res.details.setProfileURL);
+            else
+                setProfileURL('/res/images/avatar.png');
         })
     }, [])
 
+    return (
+        <React.Fragment>
+            <nav className="navigator navbar navbar-expand-lg navbar-dark bg-dark">
+                <a href={logged ? "/profile.html?id="+getSelfID() : "/login.html"} style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
+                    <img src={profileURL} className="profile-pic"></img>
+                    <div className="text-white">{username}</div>
+                </a>
+                {logged ? <button className="btn btn-outline-success my-2 my-sm-0" onClick={() => {logout().then(() => location.reload())}}>LOGOUT</button> : <button className="btn btn-outline-success my-2 my-sm-0" onClick={() => window.location.href="/login.html"}>LOGIN</button>}
+                <button className="btn btn-outline-success my-2 my-sm-0" onClick={() => window.location.href="/joingame.html"}>PLAY</button>
+                <button className="btn btn-outline-success my-2 my-sm-0" onClick={() => window.location.href="/index.html"}>HOMEPAGE</button>
+            </nav>
+        </React.Fragment>
+    )
+}
+
+PlayerInfo = (props) => {
+    const [profileURL, setProfileURL] = React.useState('');
+    const [username, setUsername] = React.useState('');
+    const [gameDetails, setGameDetails] = React.useState([]);
+
+    React.useEffect(() => {
+        get_details(props.id).then(res => {
+            if(res.details?.username != undefined)
+                setUsername(res.details.username);
+            else
+                setUsername('Guest');
+            if(res.details?.profileURL != undefined)
+                setProfileURL(res.details.setProfileURL);
+            else
+                setProfileURL('/res/images/avatar.png');
+        })
+    }, [props.id])
+
+    React.useEffect(() => {
+        // get_game_details(props.id).then(data => {
+        //     setGameDetails(data.details);
+        // });
+    }, [props.id])
+    
+    return (
+        <React.Fragment>
+            <div className="player-card" style={{display: "flex", flexDirection: "column", alignItems: "left"}}>
+                <img className="profile-pic" src={profileURL}></img>
+                <div className="profile-content">
+                    <div>{username}</div>
+                    {gameDetails.map((details, i) => "Game"+i)}
+                </div>
+            </div>
+        </React.Fragment>
+    )
+}
+
+PlayerCard = (props) => {
+    const [profileURL, setProfileURL] = React.useState('');
+    const [username, setUsername] = React.useState('');
+    
+    React.useEffect(() => {
+        get_details(props.id).then(res => {
+            if(res.details?.username != undefined)
+                setUsername(res.details.username);
+            else
+                setUsername('Guest');
+            if(res.details?.profileURL != undefined)
+                setProfileURL(res.details.setProfileURL);
+            else
+                setProfileURL('/res/images/avatar.png');
+        })
+    }, [])
+    
     return (
         <React.Fragment>
             <div className="player-card">
@@ -62,7 +141,6 @@ PlayerCard = (props) => {
 
 Chatbox = (props) => {
     var {value, setValue} = props;
-
     return (
         <React.Fragment>
             <div id="chatbox">
@@ -71,10 +149,7 @@ Chatbox = (props) => {
                 {
                     Object.keys(props.chat).map((key) => (
                         <React.Fragment key={key}>
-                            <div className="chat-msg">
-                                <div className="chat-content">{props.chat[key].content}</div>
-                                <div className="chat-name">{props.chat[key].name}</div>
-                            </div>
+                            <ChatMsg id={props.chat[key].id} content={props.chat[key].content}></ChatMsg>
                         </React.Fragment>
                     ))
                 }
@@ -83,5 +158,34 @@ Chatbox = (props) => {
                 <button onClick={() => { props.sendMsg(msg); setValue(""); }} className="btn btn-primary" id="send">Send</button>
             </div>
         </React.Fragment>
+    )
+}
+
+ChatMsg = (props) => {
+    const [profileURL, setProfileURL] = React.useState('');
+    const [username, setUsername] = React.useState('');
+
+
+    React.useEffect(() => {
+        get_details(props.id).then(res => {
+            if(res.details?.username != undefined)
+                setUsername(res.details.username);
+            else
+                setUsername('Guest');
+            if(res.details?.profileURL != undefined)
+                setProfileURL(res.details.setProfileURL);
+            else
+                setProfileURL('/res/images/avatar.png');
+        })
+    }, [])
+
+    return (
+        <div className="chat-msg">
+            <div className="chat-content">{props.content}</div>
+            <div class="chat-details">
+            <img src={profileURL} className="chat-pic"></img>
+            <div className="chat-name">{username}</div>
+            </div>
+        </div>
     )
 }

@@ -47,6 +47,10 @@ function getCookies() {
   return cookies;
 }
 
+function getSelfID() {
+  return getCookies().userID;
+}
+
 async function upload(formData) {
   return fetch('/upload', {
     method: 'post',

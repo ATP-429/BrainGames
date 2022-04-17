@@ -15,9 +15,11 @@ module.exports = class Player {
     $id;
 
     constructor(socket) {
-        let playerCookie = cookie.parse(socket.handshake.headers.cookie);
+        let playerCookie;
+        if(socket.handshake.headers.cookie != undefined)
+            playerCookie = cookie.parse(socket.handshake.headers.cookie);
         this.$socket = socket;
-        this.$id = playerCookie.userID;
+        this.$id = playerCookie?.userID;
         if(this.$id == null) {
             this.init_guest();
         }

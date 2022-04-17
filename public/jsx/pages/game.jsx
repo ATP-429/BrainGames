@@ -73,7 +73,6 @@ socket.on('details', async (details) => {
                     }
                 </div>
                 <div id="game-content">
-                    <img src="https://i.imgur.com/mOaTPx8.png" id="logo"></img>
                     <div id="container">
                         <div id="div-canvas"
                             style={{zIndex: 2, width: details.canvasWidth, height: details.canvasHeight}}
@@ -120,3 +119,8 @@ socket.on('details', async (details) => {
 
     await fetch(`/js/games/${details.name}/${details.name}-react.js`).then(file => file.text()).then((text) => eval.call(window, text));
 })
+
+ReactDOM.render(
+    <Navigator />, 
+    document.getElementById('nav')
+);

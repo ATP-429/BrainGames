@@ -24,10 +24,11 @@ GameList = () => {
 
     React.useEffect(() => {refresh()}, [pull]); //Calls refresh if 'pull' variable is changed.
 
-    React.useEffect(() => get_games_list().then(data => setGamesList(data.list)), []    );
+    React.useEffect(() => get_games_list().then(data => setGamesList(data.list)), []);
 
     return (
         <React.Fragment>
+            <Navigator/>
             <table id="games-table" className="table border border-dark games-table">
                 <thead className="table-dark">
                 <tr>
@@ -83,7 +84,7 @@ GameList = () => {
                 </div>
                 <button className="btn btn-success" onClick={() => createLobby(game, {lobbyName: lobby, visibility: visibility})}>{btnTxt}</button>
             </div>
-        </React.Fragment>
+            </React.Fragment>
     )
 }
 

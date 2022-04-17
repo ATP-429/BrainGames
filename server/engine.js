@@ -1,6 +1,6 @@
 'use strict'
 
-const {MongoClient} = require('mongodb');
+const {MongoClient, ObjectID} = require('mongodb');
 const {ObjectId} = require('mongodb');
 const express = require('express');
 const bcrypt = require('bcryptjs');
@@ -24,6 +24,10 @@ module.exports =
     },
 
     get_details: async (userID) => {
+        if(userID == undefined)
+            return null;
+        if(userID.length !== 24)
+            return null;
         return client.db('braingames').collection('user_cred').findOne({_id: ObjectId(userID)}).then((user) => {
             return user;
         });
