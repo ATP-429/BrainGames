@@ -35,12 +35,13 @@ module.exports = class GameEngine {
 
         let data = fs.readFileSync('server/games_list.txt').toString('utf-8').split('\n');
         for(let game of data) {
-            eval(`global.${game} = require('./games/${game}/${game}')`);
+        //    eval(`global.${game} = require('./games/${game}/${game}')`);
+            eval(`global.MathGame = require('./games/MathGame/MathGame')`);
             gamesList.push(game);
         }
 
-        this.create_game('DescribeGame', {lobbyName: 'Server Lobby - 01'});
-        this.create_game('MathGame', {lobbyName: 'Server Lobby - 02'});
+        //this.create_game('DescribeGame', {lobbyName: 'Server Lobby - 01'});
+        //this.create_game('MathGame', {lobbyName: 'Server Lobby - 02'});
         this.create_game('MathGame', {lobbyName: 'Server Lobby - 03'});
     }
 
