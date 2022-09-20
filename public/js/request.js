@@ -77,7 +77,7 @@ async function request(values) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(values)
-  }).then(response => {console.log(response); return response.json()});
+  }).then(response => {let JSON = response.json(); console.log(JSON); return JSON;});
 }
 
 async function log(data) {
