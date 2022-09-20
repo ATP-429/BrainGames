@@ -1,11 +1,13 @@
 'use strict'
 
+require('dotenv').config()
+
 const {MongoClient, ObjectID} = require('mongodb');
 const {ObjectId} = require('mongodb');
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const uri = require('./mongodburi');
-const client = new MongoClient(uri);
+const uri = process.env.MONGODB_URI;
+const client = new MongoClient(uri)
 
 var log = (data) => {
     console.log(data);
