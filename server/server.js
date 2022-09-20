@@ -14,7 +14,7 @@ const multer = require('multer');
 const session = require('express-session');
 const cookieParser = require("cookie-parser");
 
-const port = 3000;
+const port = process.env.port || 3000;  // Use heroku's port, or 3000 if it's not set somehow [https://stackoverflow.com/questions/28706180/setting-the-port-for-node-js-server-on-heroku, 2nd comment on accepted answer]
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'data')
