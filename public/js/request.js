@@ -74,7 +74,8 @@ async function request(values) {
   return fetch('/request', {
     method: 'post',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
     },
     body: JSON.stringify(values)
   }).then(response => {let JSON = response.json(); console.log(JSON); return JSON;});
