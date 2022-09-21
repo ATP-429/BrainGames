@@ -78,7 +78,7 @@ async function request(values) {
       'Accept': 'application/json'
     },
     body: JSON.stringify(values)
-  }).then(response => {let JSON = response.json(); console.log(JSON); return JSON;});
+  }).then(response => response.text()).then(txt => {console.log(txt); return JSON.parse(txt)});
 }
 
 async function log(data) {
