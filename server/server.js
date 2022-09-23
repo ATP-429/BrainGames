@@ -31,8 +31,6 @@ const upload = multer({ storage: storage }).single('file');
 var app = express();
 var io = socketIO();
 
-app.use(express.static(path.join(__dirname, '..', 'public')));
-
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
@@ -65,6 +63,8 @@ app.post('/download', (req, res) => {
 app.get('/', async (req, res) => {
     res.sendFile('public/index.html', {root: path.join(__dirname, '..')});
 })
+
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 const server = app.listen(port, () => {
     console.log(`Listening to port ${port}`);
