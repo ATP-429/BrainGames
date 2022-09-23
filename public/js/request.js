@@ -52,14 +52,14 @@ function getSelfID() {
 }
 
 async function upload(formData) {
-  return fetch('/upload', {
+  return fetch('/api/upload', {
     method: 'post',
     body: formData
   }).then(response => response.json());
 }
 
 async function get_file(file_id) {
-  return fetch('/download', {
+  return fetch('/api/download', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json'
@@ -71,7 +71,7 @@ async function get_file(file_id) {
 }
 
 async function request(values) {
-  return fetch('/request', {
+  return fetch('/api/request', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',

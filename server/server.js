@@ -45,8 +45,8 @@ app.use(cors());
 // }));
 // app.use(cookieParser());
 
-app.post('/request', responder.responder); //respond is a function defined in responder.js
-app.post('/upload', (req, res) => {
+app.post('/api/request', responder.responder); //respond is a function defined in responder.js
+app.post('/api/upload', (req, res) => {
     upload(req, res, (err) => {
         if(err instanceof multer.MulterError) {
             res.end(JSON.stringify({detail: "File not uploaded!" + err}));
@@ -56,7 +56,7 @@ app.post('/upload', (req, res) => {
         }
     })
 })
-app.post('/download', (req, res) => {
+app.post('/api/download', (req, res) => {
     res.download('data/'+req.body.file_id);
 })
 
