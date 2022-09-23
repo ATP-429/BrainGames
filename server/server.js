@@ -14,7 +14,7 @@ const multer = require('multer');
 const session = require('express-session');
 const cookieParser = require("cookie-parser");
 
-const port = process.env.port || 3000;  // Use heroku's port, or 3000 if it's not set somehow [https://stackoverflow.com/questions/28706180/setting-the-port-for-node-js-server-on-heroku, 2nd comment on accepted answer]
+const port = process.env.PORT || 3000;  // Use heroku's port, or 3000 if it's not set somehow [https://stackoverflow.com/questions/28706180/setting-the-port-for-node-js-server-on-heroku, 2nd comment on accepted answer]
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'data')
@@ -29,7 +29,6 @@ const upload = multer({ storage: storage }).single('file');
 
 
 var app = express();
-var io = socketIO();
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -69,7 +68,6 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 const server = app.listen(port, () => {
     console.log(`Listening to port ${port}`);
 });
-
-io.listen(server);
+var io = socketIO(server);
 
 responder.loadGameEngine(new GameEngine(io))
