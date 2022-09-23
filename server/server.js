@@ -31,10 +31,6 @@ const upload = multer({ storage: storage }).single('file');
 var app = express();
 var io = socketIO();
 
-app.get('/', async (req, res) => {
-    res.sendFile('public/index.html', {root: path.join(__dirname, '..')});
-})
-
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.use(express.json());
@@ -64,6 +60,10 @@ app.post('/upload', (req, res) => {
 })
 app.post('/download', (req, res) => {
     res.download('data/'+req.body.file_id);
+})
+
+app.get('/', async (req, res) => {
+    res.sendFile('public/index.html', {root: path.join(__dirname, '..')});
 })
 
 const server = app.listen(port, () => {
